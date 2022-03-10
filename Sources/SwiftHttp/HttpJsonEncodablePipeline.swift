@@ -17,11 +17,11 @@ public struct HttpJsonEncodablePipeline<T: Encodable>: HttpRequestPipeline {
     let encoder: HttpJsonRequestDataEncoder<T>
     
     public init(url: HttpUrl,
-         method: HttpMethod,
-         headers: [String: String] = [:],
-         body: T,
-         validators: [HttpResponseValidator] = [],
-         encoder: HttpJsonRequestDataEncoder<T> = .init()) {
+                method: HttpMethod,
+                headers: [String: String] = [:],
+                body: T,
+                validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
+                encoder: HttpJsonRequestDataEncoder<T> = .init()) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -29,7 +29,7 @@ public struct HttpJsonEncodablePipeline<T: Encodable>: HttpRequestPipeline {
         self.validators = validators
         self.encoder = encoder
     }
-
+    
     public func execute(using client: HttpClient) async throws -> HttpResponse {
         let req = HttpDataRequest(url: url,
                                   method: method,
@@ -38,12 +38,7 @@ public struct HttpJsonEncodablePipeline<T: Encodable>: HttpRequestPipeline {
             .header(.contentType, "application/json")
         
         let response = try await client.request(req)
-
-        let validation = HttpResponseValidation(validators + [
-            HttpHeaderValidator(.contentType) {
-                $0.contains("application/json")
-            },
-        ])
+        let validation = HttpResponseValidation(validators)
         try validation.validate(response)
         return response
     }

@@ -22,7 +22,7 @@ public struct HttpJsonPipeline<T: Encodable, U: Decodable>: HttpRequestPipeline 
          method: HttpMethod,
          headers: [String: String] = [:],
          body: T,
-         validators: [HttpResponseValidator] = [],
+         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
          encoder: HttpJsonRequestDataEncoder<T> = .init(),
          decoder: HttpJsonResponseDataDecoder<U> = .init()) {
         self.url = url

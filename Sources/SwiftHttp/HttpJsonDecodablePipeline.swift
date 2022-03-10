@@ -16,10 +16,10 @@ public struct HttpJsonDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     let decoder: HttpJsonResponseDataDecoder<U>
     
     public init(url: HttpUrl,
-         method: HttpMethod,
-         headers: [String: String] = [:],
-         validators: [HttpResponseValidator] = [],
-         decoder: HttpJsonResponseDataDecoder<U> = .init()) {
+                method: HttpMethod,
+                headers: [String: String] = [:],
+                validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
+                decoder: HttpJsonResponseDataDecoder<U> = .init()) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -31,19 +31,17 @@ public struct HttpJsonDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         let req = HttpDataRequest(url: url,
                                   method: method,
                                   headers: headers)
-            .header(.contentType, "application/json")
 
-        
         let response = try await client.request(req)
-
+        
         let validation = HttpResponseValidation(validators + [
             HttpHeaderValidator(.contentType) {
                 $0.contains("application/json")
             },
         ])
-
+        
         try validation.validate(response)
-
+        
         return try decoder.decode(response.data)
     }
 }

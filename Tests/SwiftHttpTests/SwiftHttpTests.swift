@@ -76,10 +76,12 @@ final class SwiftHttpTests: XCTestCase {
                 let error = try decoder.decode(res.data)
                 print(res.statusCode, error)
             }
-            catch is DecodingError {
-                // nothing to do...
+            catch {
+                print(error.localizedDescription)
             }
-            print(res.statusCode)
+        }
+        catch {
+            print(error.localizedDescription)
         }
     }
 }
