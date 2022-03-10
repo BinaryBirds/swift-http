@@ -27,12 +27,12 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         self.decoder = decoder
     }
     
-    public func execute(using client: HttpClient) async throws -> U {
+    public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> U {
         let req = HttpDataRequest(url: url,
                                   method: method,
                                   headers: headers)
 
-        let response = try await client.request(req)
+        let response = try await executor(req)
         let validation = HttpResponseValidation(validators + decoder.validators)
         try validation.validate(response)
         return try decoder.decode(response.data)

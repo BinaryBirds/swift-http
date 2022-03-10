@@ -10,5 +10,5 @@ import Foundation
 public protocol HttpRequestPipeline {
     associatedtype Response
 
-    func execute(using client: HttpClient) async throws -> Response
+    func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> Response
 }

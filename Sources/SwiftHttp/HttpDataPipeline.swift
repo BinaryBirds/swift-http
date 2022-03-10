@@ -11,28 +11,25 @@ public struct HttpDataPipeline: HttpRequestPipeline {
     
     let url: HttpUrl
     let method: HttpMethod
-    let query: [String: String]
     let headers: [HttpHeaderKey: String]
     let body: Data?
     let validators: [HttpResponseValidator]
     
     public init(url: HttpUrl,
                 method: HttpMethod,
-                query: [String: String] = [:],
                 headers: [HttpHeaderKey: String] = [:],
                 body: Data? = nil,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]) {
         self.url = url
         self.method = method
-        self.query = query
         self.headers = headers
         self.body = body
         self.validators = validators
     }
     
-    public func execute(using client: HttpClient) async throws -> HttpResponse {
+    public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> HttpResponse {
         let req = HttpDataRequest(url: url, method: method, headers: headers, body: body)
-        let response = try await client.request(req)
+        let response = try await executor(req)
         let validation = HttpResponseValidation(validators)
         try validation.validate(response)
         return response

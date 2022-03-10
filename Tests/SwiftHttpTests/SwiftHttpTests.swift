@@ -104,7 +104,7 @@ struct FeatherApi {
                                                         HttpStatusCodeValidator(.ok)
                                                      ],
                                                      decoder: .json())
-        return try await pipeline.execute(using: client)
+        return try await pipeline.execute(client.request)
     }
     
     func testQueryParams() async throws -> String? {
@@ -117,7 +117,7 @@ struct FeatherApi {
                                         validators: [
                                             HttpStatusCodeValidator(.ok)
                                         ])
-        return try await pipeline.execute(using: client).utf8String
+        return try await pipeline.execute(client.request).utf8String
         
         
     }

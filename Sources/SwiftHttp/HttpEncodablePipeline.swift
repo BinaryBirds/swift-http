@@ -30,13 +30,14 @@ public struct HttpEncodablePipeline<T: Encodable>: HttpRequestPipeline {
         self.encoder = encoder
     }
     
-    public func execute(using client: HttpClient) async throws -> HttpResponse {
+    
+    public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> HttpResponse {
         let req = HttpDataRequest(url: url,
                                   method: method,
                                   headers: headers.merging(encoder.headers) { $1 },
                                   body: try encoder.encode(body))
         
-        let response = try await client.request(req)
+        let response = try await executor(req)
         let validation = HttpResponseValidation(validators)
         try validation.validate(response)
         return response
