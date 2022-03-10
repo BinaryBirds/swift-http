@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct HttpDataResponse: HttpResponse {
+public struct HttpRawResponse: HttpResponse {
 
     public let statusCode: HttpStatusCode
     public let headers: [HttpHeaderKey: String]

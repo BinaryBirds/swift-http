@@ -71,7 +71,7 @@ final class SwiftHttpTests: XCTestCase {
             _ = try await api.test()
         }
         catch HttpError.statusCode(let res) {
-            let decoder = HttpResponseDataDecoder<FeatherError>(decoder: JSONDecoder())
+            let decoder = HttpResponseDecoder<FeatherError>(decoder: JSONDecoder())
             do {
                 let error = try decoder.decode(res.data)
                 print(res.statusCode, error)
@@ -104,11 +104,11 @@ struct FeatherApi {
                                                         HttpStatusCodeValidator(.ok)
                                                      ],
                                                      decoder: .json())
-        return try await pipeline.execute(client.request)
+        return try await pipeline.execute(client.dataTask)
     }
     
     func testQueryParams() async throws -> String? {
-        let pipeline = HttpDataPipeline(url: apiBaseUrl
+        let pipeline = HttpRawPipeline(url: apiBaseUrl
                                             .path("api", "status")
                                             .query([
                                                 "foo": "bar"
@@ -117,7 +117,7 @@ struct FeatherApi {
                                         validators: [
                                             HttpStatusCodeValidator(.ok)
                                         ])
-        return try await pipeline.execute(client.request).utf8String
+        return try await pipeline.execute(client.dataTask).utf8String
         
         
     }
@@ -129,9 +129,9 @@ struct FeatherError: Codable {
     let message: String
 }
 
-public extension HttpResponseDataDecoder {
+public extension HttpResponseDecoder {
     
-    static func custom() -> HttpResponseDataDecoder {
+    static func custom() -> HttpResponseDecoder {
         .init(decoder: CustomDataDecoder(), validators: [
             HttpHeaderValidator(.key(.contentType)) {
                 $0.contains("application/json")

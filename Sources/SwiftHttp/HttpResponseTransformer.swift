@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol HttpResponseDataTransformer {
+public protocol HttpResponseTransformer {
     
     associatedtype T: Decodable
     

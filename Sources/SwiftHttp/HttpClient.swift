@@ -9,13 +9,7 @@ import Foundation
 
 public protocol HttpClient {
 
-    func request(_ req: HttpRequest) async throws -> HttpResponse
-    func download(_ req: HttpRequest) async throws -> HttpResponse
-    func upload(_ req: HttpRequest) async throws -> HttpResponse
+    func dataTask(_ req: HttpRequest) async throws -> HttpResponse
+    func downloadTask(_ req: HttpRequest) async throws -> HttpResponse
+    func uploadTask(_ req: HttpRequest) async throws -> HttpResponse
 }
-
-
-
-
-
-

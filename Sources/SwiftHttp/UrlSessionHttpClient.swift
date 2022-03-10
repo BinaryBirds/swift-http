@@ -17,16 +17,16 @@ public struct UrlSessionHttpClient: HttpClient {
         self.log = log
     }
 
-    public func request(_ req: HttpRequest) async throws -> HttpResponse {
+    public func dataTask(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
             print(urlRequest.curlString)
         }
         let res = try await session.data(for: urlRequest)
-        return try HttpDataResponse(res)
+        return try HttpRawResponse(res)
     }
     
-    public func upload(_ req: HttpRequest) async throws -> HttpResponse {
+    public func uploadTask(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
             print(urlRequest.curlString)
@@ -43,11 +43,11 @@ public struct UrlSessionHttpClient: HttpClient {
                 c.resume(returning: (data, urlResponse))
             }.resume()
         }
-        return try HttpDataResponse(res)
+        return try HttpRawResponse(res)
     }
     
     /// returns the path data of the URL
-    public func download(_ req: HttpRequest) async throws -> HttpResponse {
+    public func downloadTask(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
             print(urlRequest.curlString)
@@ -65,7 +65,7 @@ public struct UrlSessionHttpClient: HttpClient {
             }
             .resume()
         }
-        return try HttpDataResponse(res)
+        return try HttpRawResponse(res)
     }
 }
 

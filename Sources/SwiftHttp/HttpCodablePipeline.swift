@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeline {
     
     let url: HttpUrl
@@ -15,16 +14,16 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
     let headers: [HttpHeaderKey: String]
     let body: T
     let validators: [HttpResponseValidator]
-    let encoder: HttpRequestDataEncoder<T>
-    let decoder: HttpResponseDataDecoder<U>
+    let encoder: HttpRequestEncoder<T>
+    let decoder: HttpResponseDecoder<U>
     
     public init(url: HttpUrl,
                 method: HttpMethod,
                 headers: [HttpHeaderKey: String] = [:],
                 body: T,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                encoder: HttpRequestDataEncoder<T>,
-                decoder: HttpResponseDataDecoder<U>) {
+                encoder: HttpRequestEncoder<T>,
+                decoder: HttpResponseDecoder<U>) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -35,7 +34,7 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
     }
     
     public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> U {
-        let req = HttpDataRequest(url: url,
+        let req = HttpRawRequest(url: url,
                                   method: method,
                                   headers: headers.merging(encoder.headers) { $1 },
                                   body: try encoder.encode(body))

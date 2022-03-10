@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct HttpRequestDataEncoder<T: Encodable>: HttpRequestDataTransformer {
+public struct HttpRequestEncoder<T: Encodable>: HttpRequestTransformer {
 
     public let headers: [HttpHeaderKey: String]
     let encoder: HttpDataEncoder
@@ -22,13 +22,13 @@ public struct HttpRequestDataEncoder<T: Encodable>: HttpRequestDataTransformer {
     }
 }
 
-public extension HttpRequestDataEncoder {
+public extension HttpRequestEncoder {
 
     static func json(_ encoder: JSONEncoder = .init(),
                      headers: [HttpHeaderKey: String] = [
                          .key(.accept): "application/json",
                          .key(.contentType): "application/json",
-                     ]) -> HttpRequestDataEncoder {
+                     ]) -> HttpRequestEncoder {
         .init(encoder: encoder, headers: headers)
     }
 }

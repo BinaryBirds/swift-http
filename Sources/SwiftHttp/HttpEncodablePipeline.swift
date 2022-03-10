@@ -14,14 +14,14 @@ public struct HttpEncodablePipeline<T: Encodable>: HttpRequestPipeline {
     let headers: [HttpHeaderKey: String]
     let body: T
     let validators: [HttpResponseValidator]
-    let encoder: HttpRequestDataEncoder<T>
+    let encoder: HttpRequestEncoder<T>
     
     public init(url: HttpUrl,
                 method: HttpMethod,
                 headers: [HttpHeaderKey: String] = [:],
                 body: T,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                encoder: HttpRequestDataEncoder<T>) {
+                encoder: HttpRequestEncoder<T>) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -32,7 +32,7 @@ public struct HttpEncodablePipeline<T: Encodable>: HttpRequestPipeline {
     
     
     public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> HttpResponse {
-        let req = HttpDataRequest(url: url,
+        let req = HttpRawRequest(url: url,
                                   method: method,
                                   headers: headers.merging(encoder.headers) { $1 },
                                   body: try encoder.encode(body))

@@ -14,14 +14,14 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     let headers: [HttpHeaderKey: String]
     let body: Data?
     let validators: [HttpResponseValidator]
-    let decoder: HttpResponseDataDecoder<U>
+    let decoder: HttpResponseDecoder<U>
     
     public init(url: HttpUrl,
                 method: HttpMethod,
                 headers: [HttpHeaderKey: String] = [:],
                 body: Data? = nil,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                decoder: HttpResponseDataDecoder<U>) {
+                decoder: HttpResponseDecoder<U>) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -31,7 +31,7 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     }
     
     public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> U {
-        let req = HttpDataRequest(url: url,
+        let req = HttpRawRequest(url: url,
                                   method: method,
                                   headers: headers,
                                   body: body)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct HttpDataPipeline: HttpRequestPipeline {
+public struct HttpRawPipeline: HttpRequestPipeline {
     
     let url: HttpUrl
     let method: HttpMethod
@@ -28,7 +28,7 @@ public struct HttpDataPipeline: HttpRequestPipeline {
     }
     
     public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> HttpResponse {
-        let req = HttpDataRequest(url: url, method: method, headers: headers, body: body)
+        let req = HttpRawRequest(url: url, method: method, headers: headers, body: body)
         let response = try await executor(req)
         let validation = HttpResponseValidation(validators)
         try validation.validate(response)

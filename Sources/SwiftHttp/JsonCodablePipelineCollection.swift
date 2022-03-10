@@ -16,7 +16,7 @@ public protocol JsonCodablePipelineCollection {
 public extension JsonCodablePipelineCollection {
     
     
-    func data(
+    func rawRequest(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,
@@ -24,7 +24,7 @@ public extension JsonCodablePipelineCollection {
         body: Data? = nil,
         validators: [HttpResponseValidator] = []
     ) async throws -> HttpResponse {
-        let pipeline: HttpDataPipeline = .init(
+        let pipeline: HttpRawPipeline = .init(
             url: url,
             method: method,
             headers: headers,
@@ -33,8 +33,8 @@ public extension JsonCodablePipelineCollection {
         )
         return try await pipeline.execute(executor)
     }
-
-    func encodable<T: Encodable>(
+    
+    func encodableRequest<T: Encodable>(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,
@@ -53,7 +53,7 @@ public extension JsonCodablePipelineCollection {
         return try await pipeline.execute(executor)
     }
     
-    func decodable<U: Decodable>(
+    func decodableRequest<U: Decodable>(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,
@@ -72,7 +72,7 @@ public extension JsonCodablePipelineCollection {
         return try await pipeline.execute(executor)
     }
     
-    func codable<T: Encodable, U: Decodable>(
+    func codableRequest<T: Encodable, U: Decodable>(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,

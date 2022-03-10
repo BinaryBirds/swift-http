@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct HttpResponseDataDecoder<T: Decodable>: HttpResponseDataTransformer {
+public struct HttpResponseDecoder<T: Decodable>: HttpResponseTransformer {
 
     public let validators: [HttpResponseValidator]
     let decoder: HttpDataDecoder
@@ -22,14 +22,14 @@ public struct HttpResponseDataDecoder<T: Decodable>: HttpResponseDataTransformer
     }
 }
 
-public extension HttpResponseDataDecoder {
+public extension HttpResponseDecoder {
     
     static func json(_ decoder: JSONDecoder = .init(),
                      validators: [HttpResponseValidator] = [
                          HttpHeaderValidator(.key(.contentType)) {
                              $0.contains("application/json")
                          },
-                     ]) -> HttpResponseDataDecoder {
+                     ]) -> HttpResponseDecoder {
         .init(decoder: decoder, validators: validators)
     }
 }

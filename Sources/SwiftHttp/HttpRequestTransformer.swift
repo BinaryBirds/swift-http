@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol HttpRequestDataTransformer {
+public protocol HttpRequestTransformer {
     associatedtype T: Encodable
     
     var headers: [HttpHeaderKey: String] { get }

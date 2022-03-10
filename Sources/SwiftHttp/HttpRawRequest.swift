@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct HttpDataRequest: HttpRequest {
+public struct HttpRawRequest: HttpRequest {
 
     public var method: HttpMethod
     public var url: HttpUrl
@@ -25,19 +25,19 @@ public struct HttpDataRequest: HttpRequest {
     }
 }
 
-public extension HttpDataRequest {
+public extension HttpRawRequest {
 
-    func method(_ method: HttpMethod) -> HttpDataRequest {
+    func method(_ method: HttpMethod) -> HttpRawRequest {
         .init(url: url, method: method, headers: headers, body: body)
     }
 
-    func header(_ key: HttpHeaderKey, _ value: String) -> HttpDataRequest {
+    func header(_ key: HttpHeaderKey, _ value: String) -> HttpRawRequest {
         var newHeaders = headers
         newHeaders[key] = value
         return .init(url: url, method: method, headers: newHeaders, body: body)
     }
     
-    func body(_ body: Data) -> HttpDataRequest {
+    func body(_ body: Data) -> HttpRawRequest {
         .init(url: url, method: method, headers: headers, body: body)
     }
 }
