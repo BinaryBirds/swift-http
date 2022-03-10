@@ -14,6 +14,12 @@ public protocol HttpCodablePipelineCollection {
 }
 
 public extension HttpCodablePipelineCollection {
+
+    func encoder<T: Encodable>() -> HttpRequestEncoder<T> { .json() }
+    func decoder<T: Decodable>() -> HttpResponseDecoder<T> { .json() }
+}
+
+public extension HttpCodablePipelineCollection {
     
     
     func rawRequest(

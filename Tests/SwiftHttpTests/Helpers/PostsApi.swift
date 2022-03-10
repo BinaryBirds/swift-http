@@ -11,11 +11,9 @@ import SwiftHttp
 
 struct PostsApi: HttpCodablePipelineCollection {
 
-    func encoder<T: Encodable>() -> HttpRequestEncoder<T> { .json() }
-    func decoder<T: Decodable>() -> HttpResponseDecoder<T> { .json() }
-    
     let client: HttpClient = UrlSessionHttpClient(log: true)
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
+
     
     func listPosts() async throws -> [Post] {
         try await decodableRequest(executor: client.dataTask,
