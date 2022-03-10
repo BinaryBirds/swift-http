@@ -31,7 +31,7 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         let req = HttpDataRequest(url: url,
                                   method: method,
                                   headers: headers)
-        
+
         let response = try await client.request(req)
         let validation = HttpResponseValidation(validators + decoder.validators)
         try validation.validate(response)
