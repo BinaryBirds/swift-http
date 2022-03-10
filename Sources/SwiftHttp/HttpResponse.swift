@@ -9,7 +9,7 @@ import Foundation
 
 public protocol HttpResponse {
     var statusCode: HttpStatusCode { get }
-    var headers: [String: String] { get }
+    var headers: [HttpHeaderKey: String] { get }
     var data: Data { get }
 }
 

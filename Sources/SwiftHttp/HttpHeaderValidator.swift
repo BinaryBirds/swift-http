@@ -9,15 +9,10 @@ import Foundation
 
 public struct HttpHeaderValidator: HttpResponseValidator {
     
-    let key: String
+    let key: HttpHeaderKey
     let block: (String) -> Bool
     
-    public init(_ key: HttpHeader, _ block: @escaping ((String) -> Bool)) {
-        self.key = key.rawValue
-        self.block = block
-    }
-    
-    public init(_ key: String, _ block: @escaping ((String) -> Bool)) {
+    public init(_ key: HttpHeaderKey, _ block: @escaping ((String) -> Bool)) {
         self.key = key
         self.block = block
     }

@@ -10,10 +10,10 @@ import Foundation
 public struct HttpDataResponse: HttpResponse {
 
     public let statusCode: HttpStatusCode
-    public let headers: [String: String]
+    public let headers: [HttpHeaderKey: String]
     public let data: Data
 
-    public init(statusCode: HttpStatusCode, headers: [String: String], data: Data) {
+    public init(statusCode: HttpStatusCode, headers: [HttpHeaderKey: String], data: Data) {
         self.statusCode = statusCode
         self.headers = headers
         self.data = data
@@ -23,9 +23,15 @@ public struct HttpDataResponse: HttpResponse {
         guard let response = tuple.1 as? HTTPURLResponse else {
             throw HttpError.invalidResponse
         }
-        var headers: [String: String] = [:]
+        var headers: [HttpHeaderKey: String] = [:]
         for header in response.allHeaderFields {
-            headers[String(describing: header.key)] = String(describing: header.value)
+            let key = String(describing: header.key)
+            let value = String(describing: header.value)
+            var headerKey: HttpHeaderKey = .custom(key)
+            if let keyValue = HttpHeader(rawValue: key) {
+                headerKey = .key(keyValue)
+            }
+            headers[headerKey] = value
         }
         guard let statusCode = HttpStatusCode(rawValue: response.statusCode) else {
             throw HttpError.invalidStatusCode

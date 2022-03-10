@@ -12,14 +12,14 @@ public struct HttpDataPipeline: HttpRequestPipeline {
     let url: HttpUrl
     let method: HttpMethod
     let query: [String: String]
-    let headers: [String: String]
+    let headers: [HttpHeaderKey: String]
     let body: Data?
     let validators: [HttpResponseValidator]
     
     public init(url: HttpUrl,
                 method: HttpMethod,
                 query: [String: String] = [:],
-                headers: [String: String] = [:],
+                headers: [HttpHeaderKey: String] = [:],
                 body: Data? = nil,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]) {
         self.url = url

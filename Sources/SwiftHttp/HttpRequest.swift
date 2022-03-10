@@ -10,7 +10,7 @@ import Foundation
 public protocol HttpRequest {
     var method: HttpMethod { get }
     var url: HttpUrl { get }
-    var headers: [String: String] { get }
+    var headers: [HttpHeaderKey: String] { get }
     var body: Data? { get }
     
 //    var bodyTransformer: () throws -> Data? { get }
@@ -23,7 +23,7 @@ public extension HttpRequest {
         request.httpMethod = method.rawValue.uppercased()
         request.httpBody = body
         for (key, value) in headers {
-            request.addValue(value, forHTTPHeaderField: key)
+            request.addValue(value, forHTTPHeaderField: key.keyValue)
         }
         return request
     }

@@ -12,7 +12,7 @@ public struct HttpJsonPipeline<T: Encodable, U: Decodable>: HttpRequestPipeline 
     
     let url: HttpUrl
     let method: HttpMethod
-    let headers: [String: String]
+    let headers: [HttpHeaderKey: String]
     let body: T
     let validators: [HttpResponseValidator]
     let encoder: HttpJsonRequestDataEncoder<T>
@@ -20,7 +20,7 @@ public struct HttpJsonPipeline<T: Encodable, U: Decodable>: HttpRequestPipeline 
     
     public init(url: HttpUrl,
          method: HttpMethod,
-         headers: [String: String] = [:],
+         headers: [HttpHeaderKey: String] = [:],
          body: T,
          validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
          encoder: HttpJsonRequestDataEncoder<T> = .init(),
@@ -39,13 +39,13 @@ public struct HttpJsonPipeline<T: Encodable, U: Decodable>: HttpRequestPipeline 
                                   method: method,
                                   headers: headers,
                                   body: try encoder.encode(body))
-            .header(.accept, "application/json")
-            .header(.contentType, "application/json")
+            .header(.key(.accept), "application/json")
+            .header(.key(.contentType), "application/json")
 
         let response = try await client.request(req)
 
         let validation = HttpResponseValidation(validators + [
-            HttpHeaderValidator(.contentType) {
+            HttpHeaderValidator(.key(.contentType)) {
                 $0.contains("application/json")
             },
         ])

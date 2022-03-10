@@ -11,13 +11,13 @@ public struct HttpJsonDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     
     let url: HttpUrl
     let method: HttpMethod
-    let headers: [String: String]
+    let headers: [HttpHeaderKey: String]
     let validators: [HttpResponseValidator]
     let decoder: HttpJsonResponseDataDecoder<U>
     
     public init(url: HttpUrl,
                 method: HttpMethod,
-                headers: [String: String] = [:],
+                headers: [HttpHeaderKey: String] = [:],
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
                 decoder: HttpJsonResponseDataDecoder<U> = .init()) {
         self.url = url
@@ -31,12 +31,12 @@ public struct HttpJsonDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         let req = HttpDataRequest(url: url,
                                   method: method,
                                   headers: headers)
-            .header(.accept, "application/json")
+            .header(.key(.accept), "application/json")
 
         let response = try await client.request(req)
         
         let validation = HttpResponseValidation(validators + [
-            HttpHeaderValidator(.contentType) {
+            HttpHeaderValidator(.key(.contentType)) {
                 $0.contains("application/json")
             },
         ])
