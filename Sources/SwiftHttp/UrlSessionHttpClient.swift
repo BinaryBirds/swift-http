@@ -6,19 +6,18 @@
 //
 
 import Foundation
-import SwiftHttp
 
-struct UrlSessionHttpClient: HttpClient {
+public struct UrlSessionHttpClient: HttpClient {
     
     let session: URLSession
     let log: Bool
     
-    init(session: URLSession = .shared, log: Bool = false) {
+    public init(session: URLSession = .shared, log: Bool = false) {
         self.session = session
         self.log = log
     }
 
-    func request(_ req: HttpRequest) async throws -> HttpResponse {
+    public func request(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
             print(urlRequest.curlString)
@@ -27,7 +26,7 @@ struct UrlSessionHttpClient: HttpClient {
         return try HttpDataResponse(res)
     }
     
-    func upload(_ req: HttpRequest) async throws -> HttpResponse {
+    public func upload(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
             print(urlRequest.curlString)
@@ -48,7 +47,7 @@ struct UrlSessionHttpClient: HttpClient {
     }
     
     /// returns the path data of the URL
-    func download(_ req: HttpRequest) async throws -> HttpResponse {
+    public func download(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
             print(urlRequest.curlString)

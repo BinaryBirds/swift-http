@@ -37,6 +37,7 @@ public struct HttpJsonEncodablePipeline<T: Encodable>: HttpRequestPipeline {
                                   body: try encoder.encode(body))
             .header(.accept, "application/json")
             .header(.contentType, "application/json")
+            
         
         let response = try await client.request(req)
         let validation = HttpResponseValidation(validators)

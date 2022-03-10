@@ -11,7 +11,7 @@ import SwiftHttp
 struct PostsApi {
 
     let client = UrlSessionHttpClient(log: true)
-    let apiBaseUrl = HttpUrl(domain: "jsonplaceholder.typicode.com")
+    let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
     
     func listPosts() async throws -> [Post] {
         let pipeline = HttpJsonDecodablePipeline<[Post]>(url: apiBaseUrl.path("posts"), method: .get)

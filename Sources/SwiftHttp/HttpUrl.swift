@@ -9,41 +9,79 @@ import Foundation
 
 public struct HttpUrl {
     
-    public let scheme: String
-    public let port: Int
-    public let domain: String
-    public let path: [String]
-    public let resource: String?
-    public let params: [String: String]
-    public let fragment: String?
+    public private(set) var scheme: String
+    public private(set) var host: String
+    public private(set) var port: Int
+    public private(set) var path: [String]
+    public private(set) var ext: String?
+    public private(set) var query: [String: String]
+    public private(set) var fragment: String?
 
     public init(scheme: String = "https",
+                host: String,
                 port: Int = 80,
-                domain: String,
                 path: [String] = [],
-                resource: String? = nil,
-                params: [String : String] = [:],
+                ext: String? = nil,
+                query: [String : String] = [:],
                 fragment: String? = nil) {
         self.scheme = scheme
+        self.host = host
         self.port = port
-        self.domain = domain
         self.path = path
-        self.resource = resource
-        self.params = params
+        self.ext = ext
+        self.query = query
         self.fragment = fragment
     }
 }
 
 public extension HttpUrl {
 
+    /// add a new path to the url
+    func path(_ values: String...) -> HttpUrl {
+        var newUrl = self
+        newUrl.path = path + values
+        return newUrl
+    }
+
+    func query(_ query: [String: String]) -> HttpUrl {
+        var newUrl = self
+        newUrl.query = query.merging(query) { $1 }
+        return newUrl
+    }
+    
+    func query(_ key: String, _ value: String) -> HttpUrl {
+        query([key: value])
+    }
+    
+    func ext(_ ext: String) -> HttpUrl {
+        var newUrl = self
+        newUrl.ext = ext
+        return newUrl
+    }
+    
+    func fragment(_ fragment: String) -> HttpUrl {
+        var newUrl = self
+        newUrl.fragment = fragment
+        return newUrl
+    }
+    
+    // MARK: - URL
+
     var url: URL {
         var components = URLComponents()
         components.scheme = scheme
-        components.host = domain
+        components.host = host
         components.port = port
-        components.path = "/" + path.joined(separator: "/") + "/" + (resource ?? "")
+        var path = "/" + path.joined(separator: "/")
+        if let ext = ext {
+            path += ".\(ext)"
+        }
+        else {
+            path += "/"
+        }
+        components.path = path
         components.fragment = fragment
-        components.queryItems = params.map { .init(name: $0.key, value: $0.value) }
+        components.queryItems = query.map { .init(name: $0.key, value: $0.value) }
         if let items = components.queryItems, items.isEmpty {
             components.queryItems = nil
         }
@@ -56,14 +94,5 @@ public extension HttpUrl {
         return url
     }
     
-    /// add a new path to the url
-    func path(_ values: String...) -> HttpUrl {
-        .init(scheme: scheme,
-              port: port,
-              domain: domain,
-              path: path + values,
-              resource: resource,
-              params: params,
-              fragment: fragment)
-    }
+    
 }

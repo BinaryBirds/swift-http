@@ -84,12 +84,18 @@ final class SwiftHttpTests: XCTestCase {
             print(error.localizedDescription)
         }
     }
+    
+    func testQueryParams() async throws {
+        let api = FeatherApi()
+        let res = try await api.testQueryParams()
+        XCTAssertEqual(res, "ok")
+    }
 }
 
 struct FeatherApi {
 
     let client = UrlSessionHttpClient(log: true)
-    let apiBaseUrl = HttpUrl(scheme: "http", domain: "test.binarybirds.com")
+    let apiBaseUrl = HttpUrl(scheme: "http", host: "test.binarybirds.com")
     
     func test() async throws -> [Post] {
         let pipeline = HttpJsonDecodablePipeline<[Post]>(url: apiBaseUrl.path("api", "test"),
@@ -98,6 +104,21 @@ struct FeatherApi {
                                                             HttpStatusCodeValidator(.ok)
                                                          ])
         return try await pipeline.execute(using: client)
+    }
+    
+    func testQueryParams() async throws -> String? {
+        let pipeline = HttpDataPipeline(url: apiBaseUrl
+                                            .path("api", "status")
+                                            .query([
+                                                "foo": "bar"
+                                            ]),
+                                        method: .get,
+                                        validators: [
+                                            HttpStatusCodeValidator(.ok)
+                                        ])
+        return try await pipeline.execute(using: client).utf8String
+        
+        
     }
     
     
