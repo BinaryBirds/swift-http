@@ -63,4 +63,44 @@ final class SwiftHttpTests: XCTestCase {
         let res = try await api.deletePost(1)
         XCTAssertEqual(res.statusCode, .ok)
     }
+    
+    
+    func testError() async throws {
+        let api = FeatherApi()
+        do {
+            _ = try await api.test()
+        }
+        catch HttpError.statusCode(let res) {
+            let decoder = HttpJsonResponseDataDecoder<FeatherError>()
+            do {
+                let error = try decoder.decode(res.data)
+                print(res.statusCode, error)
+            }
+            catch is DecodingError {
+                // nothing to do...
+            }
+            print(res.statusCode)
+        }
+    }
+}
+
+struct FeatherApi {
+
+    let client = UrlSessionHttpClient(log: true)
+    let apiBaseUrl = HttpUrl(scheme: "http", domain: "test.binarybirds.com")
+    
+    func test() async throws -> [Post] {
+        let pipeline = HttpJsonDecodablePipeline<[Post]>(url: apiBaseUrl.path("api", "test"),
+                                                         method: .get,
+                                                         validators: [
+                                                            HttpStatusCodeValidator(.ok)
+                                                         ])
+        return try await pipeline.execute(using: client)
+    }
+    
+    
+}
+
+struct FeatherError: Codable {
+    let message: String
 }

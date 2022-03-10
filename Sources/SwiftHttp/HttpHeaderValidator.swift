@@ -24,10 +24,10 @@ public struct HttpHeaderValidator: HttpResponseValidator {
 
     public func validate(_ response: HttpResponse) throws {
         guard let value = response.headers[key] else {
-            throw HttpError.missingHeader
+            throw HttpError.missingHeader(response)
         }
         guard block(value) else {
-            throw HttpError.invalidHeaderValue
+            throw HttpError.invalidHeaderValue(response)
         }
     }
 }

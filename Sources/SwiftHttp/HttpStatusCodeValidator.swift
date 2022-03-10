@@ -18,11 +18,11 @@ public struct HttpStatusCodeValidator: HttpResponseValidator {
 
     public func validate(_ response: HttpResponse) throws {
         if let code = code, response.statusCode != code {
-            throw HttpError.statusCode(response.statusCode)
+            throw HttpError.statusCode(response)
         }
         //TODO: check code == nil
         guard response.statusCode.isValid else {
-            throw HttpError.statusCode(response.statusCode)
+            throw HttpError.statusCode(response)
         }
     }
 }

@@ -10,8 +10,8 @@ import Foundation
 public enum HttpError: LocalizedError {
     case invalidResponse
     case invalidStatusCode
-    case statusCode(HttpStatusCode)
-    case missingHeader
-    case invalidHeaderValue
+    case statusCode(HttpResponse)
+    case missingHeader(HttpResponse)
+    case invalidHeaderValue(HttpResponse)
     case unknown(Error)
 }
