@@ -31,6 +31,7 @@ public struct HttpJsonDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         let req = HttpDataRequest(url: url,
                                   method: method,
                                   headers: headers)
+            .header(.accept, "application/json")
 
         let response = try await client.request(req)
         

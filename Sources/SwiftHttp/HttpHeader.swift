@@ -9,6 +9,8 @@
 public enum HttpHeader: String {
 
     case authorization = "Authorization"
+    case accept = "Accept"
+
     /// Permanent Message Header Field Names
     case acceptLanguage = "Accept-Language"
     case alsoControl = "Also-Control"

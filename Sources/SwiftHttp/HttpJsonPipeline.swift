@@ -39,6 +39,7 @@ public struct HttpJsonPipeline<T: Encodable, U: Decodable>: HttpRequestPipeline 
                                   method: method,
                                   headers: headers,
                                   body: try encoder.encode(body))
+            .header(.accept, "application/json")
             .header(.contentType, "application/json")
 
         let response = try await client.request(req)
