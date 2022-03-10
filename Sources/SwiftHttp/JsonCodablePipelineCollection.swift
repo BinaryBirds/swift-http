@@ -57,6 +57,7 @@ public extension JsonCodablePipelineCollection {
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,
+        body: Data? = nil,
         headers: [HttpHeaderKey: String] = [:],
         validators: [HttpResponseValidator] = []
     ) async throws -> U {
@@ -64,6 +65,7 @@ public extension JsonCodablePipelineCollection {
             url: url,
             method: method,
             headers: headers,
+            body: body,
             validators: validators,
             decoder: .json(decoder)
         )
