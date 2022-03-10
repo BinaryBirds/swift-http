@@ -13,7 +13,7 @@ public struct HttpUrl {
     public private(set) var host: String
     public private(set) var port: Int
     public private(set) var path: [String]
-    public private(set) var ext: String?
+    public private(set) var resource: String?
     public private(set) var query: [String: String]
     public private(set) var fragment: String?
 
@@ -21,14 +21,14 @@ public struct HttpUrl {
                 host: String,
                 port: Int = 80,
                 path: [String] = [],
-                ext: String? = nil,
+                resource: String? = nil,
                 query: [String : String] = [:],
                 fragment: String? = nil) {
         self.scheme = scheme
         self.host = host
         self.port = port
         self.path = path
-        self.ext = ext
+        self.resource = resource
         self.query = query
         self.fragment = fragment
     }
@@ -54,9 +54,9 @@ public extension HttpUrl {
         query([key: value])
     }
     
-    func ext(_ ext: String) -> HttpUrl {
+    func resource(_ resource: String) -> HttpUrl {
         var newUrl = self
-        newUrl.ext = ext
+        newUrl.resource = resource
         return newUrl
     }
     
@@ -74,8 +74,8 @@ public extension HttpUrl {
         components.host = host
         components.port = port
         var path = "/" + path.joined(separator: "/")
-        if let ext = ext {
-            path += ".\(ext)"
+        if let resource = resource {
+            path += (resource.hasPrefix("/") ? resource : "/" + resource)
         }
         else {
             path += "/"
