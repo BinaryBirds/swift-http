@@ -7,41 +7,35 @@
 
 import Foundation
 
-public struct HttpJsonEncodablePipeline<T: Encodable>: HttpRequestPipeline {
+public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     
     let url: HttpUrl
     let method: HttpMethod
     let headers: [HttpHeaderKey: String]
-    let body: T
     let validators: [HttpResponseValidator]
-    let encoder: HttpJsonRequestDataEncoder<T>
+    let decoder: HttpResponseDataDecoder<U>
     
     public init(url: HttpUrl,
                 method: HttpMethod,
                 headers: [HttpHeaderKey: String] = [:],
-                body: T,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                encoder: HttpJsonRequestDataEncoder<T> = .init()) {
+                decoder: HttpResponseDataDecoder<U> = .init(decoder: JSONDecoder())) {
         self.url = url
         self.method = method
         self.headers = headers
-        self.body = body
         self.validators = validators
-        self.encoder = encoder
+        self.decoder = decoder
     }
     
-    public func execute(using client: HttpClient) async throws -> HttpResponse {
+    public func execute(using client: HttpClient) async throws -> U {
         let req = HttpDataRequest(url: url,
                                   method: method,
-                                  headers: headers,
-                                  body: try encoder.encode(body))
-            .header(.key(.accept), "application/json")
-            .header(.key(.contentType), "application/json")
-            
+                                  headers: headers)
         
         let response = try await client.request(req)
-        let validation = HttpResponseValidation(validators)
+        let validation = HttpResponseValidation(validators + decoder.validators)
         try validation.validate(response)
-        return response
+        return try decoder.decode(response.data)
     }
 }
+

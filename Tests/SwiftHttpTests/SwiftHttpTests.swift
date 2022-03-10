@@ -71,7 +71,7 @@ final class SwiftHttpTests: XCTestCase {
             _ = try await api.test()
         }
         catch HttpError.statusCode(let res) {
-            let decoder = HttpJsonResponseDataDecoder<FeatherError>()
+            let decoder = HttpResponseDataDecoder<FeatherError>(decoder: JSONDecoder())
             do {
                 let error = try decoder.decode(res.data)
                 print(res.statusCode, error)
@@ -98,7 +98,7 @@ struct FeatherApi {
     let apiBaseUrl = HttpUrl(scheme: "http", host: "test.binarybirds.com")
      
     func test() async throws -> [Post] {
-        let pipeline = HttpJsonDecodablePipeline<[Post]>(url: apiBaseUrl.path("api", "test"),
+        let pipeline = HttpDecodablePipeline<[Post]>(url: apiBaseUrl.path("api", "test"),
                                                          method: .get,
                                                          validators: [
                                                             HttpStatusCodeValidator(.ok)

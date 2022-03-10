@@ -7,43 +7,38 @@
 
 import Foundation
 
-public struct HttpJsonDecodablePipeline<U: Decodable>: HttpRequestPipeline {
+public struct HttpEncodablePipeline<T: Encodable>: HttpRequestPipeline {
     
     let url: HttpUrl
     let method: HttpMethod
     let headers: [HttpHeaderKey: String]
+    let body: T
     let validators: [HttpResponseValidator]
-    let decoder: HttpJsonResponseDataDecoder<U>
+    let encoder: HttpRequestDataEncoder<T>
     
     public init(url: HttpUrl,
                 method: HttpMethod,
                 headers: [HttpHeaderKey: String] = [:],
+                body: T,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                decoder: HttpJsonResponseDataDecoder<U> = .init()) {
+                encoder: HttpRequestDataEncoder<T> = .init(encoder: JSONEncoder())) {
         self.url = url
         self.method = method
         self.headers = headers
+        self.body = body
         self.validators = validators
-        self.decoder = decoder
+        self.encoder = encoder
     }
     
-    public func execute(using client: HttpClient) async throws -> U {
+    public func execute(using client: HttpClient) async throws -> HttpResponse {
         let req = HttpDataRequest(url: url,
                                   method: method,
-                                  headers: headers)
-            .header(.key(.accept), "application/json")
-
+                                  headers: headers.merging(encoder.headers) { $1 },
+                                  body: try encoder.encode(body))
+        
         let response = try await client.request(req)
-        
-        let validation = HttpResponseValidation(validators + [
-            HttpHeaderValidator(.key(.contentType)) {
-                $0.contains("application/json")
-            },
-        ])
-        
+        let validation = HttpResponseValidation(validators)
         try validation.validate(response)
-        
-        return try decoder.decode(response.data)
+        return response
     }
 }
-
