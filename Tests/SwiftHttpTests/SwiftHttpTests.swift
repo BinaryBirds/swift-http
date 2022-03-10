@@ -96,7 +96,7 @@ struct FeatherApi {
 
     let client = UrlSessionHttpClient(log: true)
     let apiBaseUrl = HttpUrl(scheme: "http", host: "test.binarybirds.com")
-    
+     
     func test() async throws -> [Post] {
         let pipeline = HttpJsonDecodablePipeline<[Post]>(url: apiBaseUrl.path("api", "test"),
                                                          method: .get,

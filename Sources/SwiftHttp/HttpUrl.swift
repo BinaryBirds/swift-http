@@ -43,13 +43,14 @@ public extension HttpUrl {
         return newUrl
     }
 
-    func query(_ query: [String: String]) -> HttpUrl {
+    func query(_ query: [String: String?]) -> HttpUrl {
+        let finalQuery = query.compactMapValues { $0 }
         var newUrl = self
-        newUrl.query = query.merging(query) { $1 }
+        newUrl.query = newUrl.query.merging(finalQuery) { $1 }
         return newUrl
     }
-    
-    func query(_ key: String, _ value: String) -> HttpUrl {
+
+    func query(_ key: String, _ value: String?) -> HttpUrl {
         query([key: value])
     }
     
