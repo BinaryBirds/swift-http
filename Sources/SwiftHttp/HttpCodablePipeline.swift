@@ -23,8 +23,8 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
                 headers: [HttpHeaderKey: String] = [:],
                 body: T,
                 validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                encoder: HttpRequestDataEncoder<T> = .init(encoder: JSONEncoder()),
-                decoder: HttpResponseDataDecoder<U> = .init(decoder: JSONDecoder())) {
+                encoder: HttpRequestDataEncoder<T>,
+                decoder: HttpResponseDataDecoder<U>) {
         self.url = url
         self.method = method
         self.headers = headers

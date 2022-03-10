@@ -99,10 +99,11 @@ struct FeatherApi {
      
     func test() async throws -> [Post] {
         let pipeline = HttpDecodablePipeline<[Post]>(url: apiBaseUrl.path("api", "test"),
-                                                         method: .get,
-                                                         validators: [
-                                                            HttpStatusCodeValidator(.ok)
-                                                         ])
+                                                     method: .get,
+                                                     validators: [
+                                                        HttpStatusCodeValidator(.ok)
+                                                     ],
+                                                     decoder: .json())
         return try await pipeline.execute(using: client)
     }
     
