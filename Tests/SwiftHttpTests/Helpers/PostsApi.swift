@@ -9,10 +9,10 @@ import Foundation
 import SwiftHttp
 
 
-struct PostsApi: JsonCodablePipelineCollection {
-    
-    var encoder: JSONEncoder = { .init() }()
-    var decoder: JSONDecoder = { .init() }()
+struct PostsApi: HttpCodablePipelineCollection {
+
+    func encoder<T: Encodable>() -> HttpRequestEncoder<T> { .json() }
+    func decoder<T: Decodable>() -> HttpResponseDecoder<T> { .json() }
     
     let client: HttpClient = UrlSessionHttpClient(log: true)
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")

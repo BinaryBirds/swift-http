@@ -12,8 +12,6 @@ public protocol HttpRequest {
     var url: HttpUrl { get }
     var headers: [HttpHeaderKey: String] { get }
     var body: Data? { get }
-    
-//    var bodyTransformer: () throws -> Data? { get }
 }
 
 public extension HttpRequest {

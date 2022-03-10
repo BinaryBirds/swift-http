@@ -7,13 +7,13 @@
 
 import Foundation
 
-public protocol JsonCodablePipelineCollection {
-    
-    var encoder: JSONEncoder { get }
-    var decoder: JSONDecoder { get }
+public protocol HttpCodablePipelineCollection {
+
+    func encoder<T: Encodable>() -> HttpRequestEncoder<T>
+    func decoder<T: Decodable>() -> HttpResponseDecoder<T>
 }
 
-public extension JsonCodablePipelineCollection {
+public extension HttpCodablePipelineCollection {
     
     
     func rawRequest(
@@ -48,7 +48,7 @@ public extension JsonCodablePipelineCollection {
             headers: headers,
             body: body,
             validators: validators,
-            encoder: .json(encoder)
+            encoder: encoder()
         )
         return try await pipeline.execute(executor)
     }
@@ -67,7 +67,7 @@ public extension JsonCodablePipelineCollection {
             headers: headers,
             body: body,
             validators: validators,
-            decoder: .json(decoder)
+            decoder: decoder()
         )
         return try await pipeline.execute(executor)
     }
@@ -85,8 +85,8 @@ public extension JsonCodablePipelineCollection {
                 headers: headers,
                 body: body,
                 validators: validators,
-                encoder: .json(encoder),
-                decoder: .json(decoder)
+                encoder: encoder(),
+                decoder: decoder()
             )
             return try await pipeline.execute(executor)
         }
