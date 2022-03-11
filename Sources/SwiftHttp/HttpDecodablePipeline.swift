@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// A decodable pipeline workflow, to decode a value from the response
 public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     
     let url: HttpUrl
@@ -16,6 +17,16 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     let validators: [HttpResponseValidator]
     let decoder: HttpResponseDecoder<U>
     
+    ///
+    /// Initialize the pipeline
+    ///
+    /// - Parameter url: The url to send the request
+    /// - Parameter method: The request method
+    /// - Parameter headers: The request headers
+    /// - Parameter body: The request body as a data value
+    /// - Parameter validators: The response validators
+    /// - Parameter decoder: The decoder used to decode the response data
+    ///
     public init(url: HttpUrl,
                 method: HttpMethod,
                 headers: [HttpHeaderKey: String] = [:],
@@ -30,6 +41,15 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         self.decoder = decoder
     }
     
+    ///
+    /// Executes  the request, encodes the body, validates the response and decodes the data
+    ///
+    /// - Parameter executor: The  executor function to perform the HttpRequest
+    ///
+    /// - Throws: `Error` if something was wrong
+    ///
+    /// - Returns: The decoded response object
+    ///
     public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> U {
         let req = HttpRawRequest(url: url,
                                   method: method,

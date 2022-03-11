@@ -10,7 +10,8 @@ import Foundation
 ///
 /// Abstract HTTP request pipeline
 ///
-/// A pipeline is a descriptor of a request -> response flow
+/// A pipeline is a descriptor of a request -> response workflow.
+/// It might includes validations date encoding, decoding
 ///
 public protocol HttpRequestPipeline {
     
