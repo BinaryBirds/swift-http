@@ -8,8 +8,7 @@
 import Foundation
 import SwiftHttp
 
-
-struct PostsApi: HttpCodablePipelineCollection {
+struct PostApi: HttpCodablePipelineCollection {
 
     let client: HttpClient = UrlSessionHttpClient(log: true)
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
