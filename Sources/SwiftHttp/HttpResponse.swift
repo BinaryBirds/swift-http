@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  HttpResponse.swift
+//  SwiftHttp
 //
 //  Created by Tibor Bodecs on 2022. 01. 02..
 //

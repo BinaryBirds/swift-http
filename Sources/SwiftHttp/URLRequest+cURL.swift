@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  URLRequest+cURL.swift
+//  SwiftHttp
 //
 //  Created by Tibor Bodecs on 2022. 02. 13..
 //

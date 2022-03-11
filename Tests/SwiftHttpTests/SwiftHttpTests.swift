@@ -1,3 +1,10 @@
+//
+//  SwiftHttpTests.swift
+//  SwiftHttpTests
+//
+//  Created by Tibor Bodecs on 2022. 03. 10..
+//
+
 import XCTest
 @testable import SwiftHttp
 
@@ -70,7 +77,7 @@ final class SwiftHttpTests: XCTestCase {
         do {
             _ = try await api.test()
         }
-        catch HttpError.statusCode(let res) {
+        catch HttpError.invalidStatusCode(let res) {
             let decoder = HttpResponseDecoder<FeatherError>(decoder: JSONDecoder())
             do {
                 let error = try decoder.decode(res.data)

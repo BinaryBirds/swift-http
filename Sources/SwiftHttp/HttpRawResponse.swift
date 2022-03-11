@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  HttpRawResponse.swift
+//  SwiftHttp
 //
 //  Created by Tibor Bodecs on 2022. 03. 09..
 //
@@ -34,7 +34,7 @@ public struct HttpRawResponse: HttpResponse {
             headers[headerKey] = value
         }
         guard let statusCode = HttpStatusCode(rawValue: response.statusCode) else {
-            throw HttpError.invalidStatusCode
+            throw HttpError.unknownStatusCode
         }
         self.init(statusCode: statusCode, headers: headers, data: tuple.0)
     }

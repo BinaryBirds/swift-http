@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  HttpCodablePipelineCollection.swift
+//  SwiftHttp
 //
 //  Created by Tibor Bodecs on 2022. 03. 10..
 //

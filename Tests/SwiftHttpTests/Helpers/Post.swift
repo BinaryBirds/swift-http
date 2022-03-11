@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  Post.swift
+//  SwiftHttpTests
 //
 //  Created by Tibor Bodecs on 2022. 03. 10..
 //

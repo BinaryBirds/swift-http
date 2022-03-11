@@ -1,14 +1,23 @@
 //
-//  File.swift
-//  
+//  HttpHeader.swift
+//  SwiftHttp
 //
 //  Created by Tibor Bodecs on 2022. 01. 03..
 //
 
-/// https://www.iana.org/assignments/message-headers/message-headers.xhtml
+import Foundation
+
+///
+/// Common HTTP header keys
+///
+/// For more details, please visit: [iana.org](https://www.iana.org/assignments/message-headers/message-headers.xhtml)
+///
 public enum HttpHeader: String {
 
+    /// Authorization header
     case authorization = "Authorization"
+    
+    /// Accept header
     case accept = "Accept"
 
     /// Permanent Message Header Field Names

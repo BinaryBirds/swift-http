@@ -1,12 +1,17 @@
 //
-//  File.swift
-//  
+//  HttpMethod.swift
+//  SwiftHttp
 //
 //  Created by Tibor Bodecs on 2022. 01. 02..
 //
 
-/// https://www.iana.org/assignments/http-methods/http-methods.xhtml
+///
+/// Common HTTP methods
+///
+/// For more details, please visit: [iana.org](https://www.iana.org/assignments/http-methods/http-methods.xhtml)
+///
 public enum HttpMethod: String {
+    
     case acl
     case baselineControl = "baseline-control"
     case bind
