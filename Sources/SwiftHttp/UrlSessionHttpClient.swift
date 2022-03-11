@@ -7,16 +7,32 @@
 
 import Foundation
 
+/// Default URLSession based implementation of the HttpClient protocol
 public struct UrlSessionHttpClient: HttpClient {
     
     let session: URLSession
     let log: Bool
     
+    ///
+    /// Initialize a new client object
+    ///
+    /// - Parameter session: The URLSession instance, default: `.shared`
+    /// - Parameter log: Is logging enabled for the client
+    ///
     public init(session: URLSession = .shared, log: Bool = false) {
         self.session = session
         self.log = log
     }
 
+    ///
+    /// Performs a data task (in memory) HTTP request
+    ///
+    /// - Parameter req: The request object
+    ///
+    /// - Throws: `HttpError` if something was wrong with the request
+    ///
+    /// - Returns: The entire HTTP response
+    ///
     public func dataTask(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
@@ -26,6 +42,15 @@ public struct UrlSessionHttpClient: HttpClient {
         return try HttpRawResponse(res)
     }
     
+    ///
+    /// Uploads the contents of the request and returns the response
+    ///
+    /// - Parameter req: The request object
+    ///
+    /// - Throws: `HttpError` if something was wrong with the request
+    ///
+    /// - Returns: The entire HTTP response
+    ///
     public func uploadTask(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {
@@ -46,7 +71,15 @@ public struct UrlSessionHttpClient: HttpClient {
         return try HttpRawResponse(res)
     }
     
-    /// returns the path data of the URL
+    ///
+    /// Downloads the contents of the request and returns the response
+    ///
+    /// - Parameter req: The request object
+    ///
+    /// - Throws: `HttpError` if something was wrong with the request
+    ///
+    /// - Returns: The entire response, setting the file location url as an encoded utf8 string as the response data
+    ///
     public func downloadTask(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
         if log {

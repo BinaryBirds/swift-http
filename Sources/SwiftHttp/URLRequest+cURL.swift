@@ -9,6 +9,7 @@ import Foundation
 
 public extension URLRequest {
 
+    /// Returns the curl command representation of a URLRequest
     var curlString: String {
         guard let url = url else {
             return ""

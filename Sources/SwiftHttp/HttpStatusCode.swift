@@ -5,7 +5,11 @@
 //  Created by Tibor Bodecs on 2022. 01. 02..
 //
 
-/// http://www.iana.org/assignments/http-status-codes
+///
+/// Common HTTP status codes
+///
+/// For more details, please visit: [iana.org](http://www.iana.org/assignments/http-status-codes)
+///
 public enum HttpStatusCode: Int {
     // 1xx
     case `continue`                     = 100
@@ -76,7 +80,8 @@ public enum HttpStatusCode: Int {
 }
 
 public extension HttpStatusCode {
-
+    
+    /// A HTTP response is considered valid if the status code is between 200 and 299
     var isValid: Bool {
         rawValue >= 200 && rawValue < 300
     }

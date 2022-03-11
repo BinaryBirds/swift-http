@@ -7,16 +7,41 @@
 
 import Foundation
 
+/// A wrapper to store and manipulate URLs in a safer way
 public struct HttpUrl {
     
+    /// Scheme of the url, e.g. https
     public private(set) var scheme: String
+    
+    /// Hostname of the url, e.g. www.localhost.com
     public private(set) var host: String
+    
+    /// Port of the url, e.g. 80
     public private(set) var port: Int
+    
+    /// Path components of the url, e.g. `/api/list = ["api", "list"]`
     public private(set) var path: [String]
+    
+    /// Resource part of the url after the path components, e.g. `sitemap.xml`
     public private(set) var resource: String?
+    
+    /// Query parameters, e.g. `?foo=bar`
     public private(set) var query: [String: String]
+    
+    /// Fragment of the url, e.g. `#foo`
     public private(set) var fragment: String?
 
+    ///
+    /// Initialize a HttpUrl object
+    ///
+    /// - Parameter scheme: The  scheme, default: `https`
+    /// - Parameter host: The  host
+    /// - Parameter port: The  port, default: `80`
+    /// - Parameter path: The  path, default: `[]`
+    /// - Parameter resource: The  resource, default: `nil`
+    /// - Parameter query: The  query, default: `[:]`
+    /// - Parameter fragment: The  fragment, default: `nil`
+    ///
     public init(scheme: String = "https",
                 host: String,
                 port: Int = 80,
@@ -36,13 +61,26 @@ public struct HttpUrl {
 
 public extension HttpUrl {
 
-    /// add a new path to the url
+    ///
+    /// Add new path components to a given url
+    ///
+    /// - Parameter values: The path components
+    ///
+    /// - Returns: A new HttpUrl object
+    ///
     func path(_ values: String...) -> HttpUrl {
         var newUrl = self
         newUrl.path = path + values
         return newUrl
     }
 
+    ///
+    /// Add new query parameter values to the url
+    ///
+    /// - Parameter query: The query values
+    ///
+    /// - Returns: A new HttpUrl object
+    ///
     func query(_ query: [String: String?]) -> HttpUrl {
         let finalQuery = query.compactMapValues { $0 }
         var newUrl = self
@@ -50,16 +88,38 @@ public extension HttpUrl {
         return newUrl
     }
 
+    ///
+    /// Add a single query parameter value to the url
+    ///
+    /// - Parameter key: The key of the query param
+    /// - Parameter value: The value of the query param
+    ///
+    /// - Returns: A new HttpUrl object
+    ///
     func query(_ key: String, _ value: String?) -> HttpUrl {
         query([key: value])
     }
     
+    ///
+    /// Add a new resource part to the url
+    ///
+    /// - Parameter resource: The resource path component
+    ///
+    /// - Returns: A new HttpUrl object
+    ///
     func resource(_ resource: String) -> HttpUrl {
         var newUrl = self
         newUrl.resource = resource
         return newUrl
     }
     
+    ///
+    /// Add a fragment to the url
+    ///
+    /// - Parameter fragment: The fragment value
+    ///
+    /// - Returns: A new HttpUrl object
+    ///
     func fragment(_ fragment: String) -> HttpUrl {
         var newUrl = self
         newUrl.fragment = fragment
@@ -68,6 +128,7 @@ public extension HttpUrl {
     
     // MARK: - URL
 
+    /// Returns the URL representation of the HttpUrl object
     var url: URL {
         var components = URLComponents()
         components.scheme = scheme
@@ -94,6 +155,4 @@ public extension HttpUrl {
         }
         return url
     }
-    
-    
 }
