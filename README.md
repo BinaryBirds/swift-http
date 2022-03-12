@@ -4,7 +4,7 @@ An awesome Swift HTTP library to rapidly create communication layers with API en
 
 ## Install
 
-You can simply use `SwiftHtml` as a dependency via the Swift Package Manager:
+You can simply use `SwiftHttp` as a dependency via the Swift Package Manager:
 
 ```swift
 .package(url: "https://github.com/binarybirds/swift-http", from: "1.0.0"),
@@ -63,3 +63,14 @@ The HttpClient provides the executors to perform data, download or upload tasks.
 
 You can create decodable, encodable, codable or raw request when using a codable pipeline collection.
 
+## Request pipelines
+
+
+## Custom decoder
+
+If you are using a request pipeline collection you can override the encoder and decoder objects.
+
+```swift
+
+
+``` 
