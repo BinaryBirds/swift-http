@@ -21,14 +21,12 @@ final class HttpRequestTests: XCTestCase {
                                  method: .post,
                                  headers: [
                                     .key(.authorization): "Bearer \(token)",
-                                    .custom("my-header"): "my-header-value",
                                  ],
                                  body: body)
         
         let expectation = """
             curl "https://localhost/login/" \\
             \t-X POST \\
-            \t-H 'my-header: my-header-value' \\
             \t-H 'Authorization: Bearer valid-token' \\
             \t-d '{"foo":"bar"}'
             """

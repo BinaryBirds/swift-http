@@ -151,6 +151,39 @@ You can transform a HttpRequest into a URLReequest via the `.urlRequest` propert
 You can print the cURL representation of a request by using the `.curlString` property on a URLRequest object.
 
 
+## Response validation
+
+You can validate a response by using a HttpResponseValidator object.
+
+```swift
+// mock response
+let response = HttpRawResponse(statusCode: .ok,
+                               headers: [
+                                .key(.contentType): "application/json",
+                               ],
+                               data: .init())
+
+// check if the status code is between 200 and 299               
+let validator1 = HttpStatusCodeValidator() // -> (.ok), (.notFound), etc.
+try validator1.validate(response)
+
+
+// check if a header key exists and the value is equal to "application/json"
+let validator2 = HttpHeaderValidator(.key(.contentType)) { value in
+    value == "application/json"
+}
+
+try validator2.validate(response)
+
+
+// validate using multiple validators
+let validation = HttpResponseValidation([validator1, validator2])
+try validation.validate(response)
+```
+
+It is possible to check for multiple validation criterias using a HttpResponseValidation. 
+
+
 ## Pipelines
 
 A pipeline allows you to transform a raw request and a raw response using a set of custom actions. 
@@ -160,3 +193,5 @@ You can create your own HttpRequestTransformer object to add extra headers to yo
 You can create your own HttpResponseTransformer object to validate the response and decode a custom value from the response data.
 
 The codable (encodable, decodable, codable) pipelines are a good example of this approach.
+
+
