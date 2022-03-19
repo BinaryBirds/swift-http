@@ -64,7 +64,7 @@ public extension HttpCodablePipelineCollection {
         method: HttpMethod,
         headers: [HttpHeaderKey: String] = [:],
         body: Data? = nil,
-        validators: [HttpResponseValidator] = []
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]
     ) async throws -> HttpResponse {
         let pipeline: HttpRawPipeline = .init(
             url: url,
@@ -96,7 +96,7 @@ public extension HttpCodablePipelineCollection {
         method: HttpMethod,
         headers: [HttpHeaderKey: String] = [:],
         body: T,
-        validators: [HttpResponseValidator] = []
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]
     ) async throws -> HttpResponse {
         let pipeline: HttpEncodablePipeline<T> = .init(
             url: url,
@@ -129,7 +129,7 @@ public extension HttpCodablePipelineCollection {
         method: HttpMethod,
         body: Data? = nil,
         headers: [HttpHeaderKey: String] = [:],
-        validators: [HttpResponseValidator] = []
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]
     ) async throws -> U {
         let pipeline: HttpDecodablePipeline<U> = .init(
             url: url,
@@ -162,7 +162,7 @@ public extension HttpCodablePipelineCollection {
         method: HttpMethod,
         headers: [HttpHeaderKey: String] = [:],
         body: T,
-        validators: [HttpResponseValidator] = []) async throws -> U {
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]) async throws -> U {
             let pipeline: HttpCodablePipeline<T, U> = .init(
                 url: url,
                 method: method,
