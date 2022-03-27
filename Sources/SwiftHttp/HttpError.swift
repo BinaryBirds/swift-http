@@ -25,6 +25,9 @@ public enum HttpError: LocalizedError {
     /// The response has an invalid header value
     case invalidHeaderValue(HttpResponse)
     
+    /// Upload request does not have data to send
+    case missingUploadData
+    
     /// Unknown error
     case unknown(Error)
     
@@ -41,6 +44,8 @@ public enum HttpError: LocalizedError {
             return "Missing header"
         case .invalidHeaderValue(_):
             return "Invalid header value"
+        case .missingUploadData:
+            return "Missing upload data"
         case .unknown(let error):
             return error.localizedDescription
         }

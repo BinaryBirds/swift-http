@@ -53,21 +53,13 @@ public struct UrlSessionHttpClient: HttpClient {
     ///
     public func uploadTask(_ req: HttpRequest) async throws -> HttpResponse {
         let urlRequest = req.urlRequest
+        guard let data = urlRequest.httpBody else {
+            throw HttpError.missingUploadData
+        }
         if log {
             print(urlRequest.curlString)
         }
-        
-        let res: (Data, URLResponse) = try await withUnsafeThrowingContinuation { c in
-            session.uploadTask(with: urlRequest, from: urlRequest.httpBody) { data, response, error in
-                if let error = error {
-                    return c.resume(throwing: error)
-                }
-                guard let data = data, let urlResponse = response else {
-                    return c.resume(throwing: HttpError.invalidResponse)
-                }
-                c.resume(returning: (data, urlResponse))
-            }.resume()
-        }
+        let res: (Data, URLResponse) = try await session.upload(for: urlRequest, from: data, delegate: nil)
         return try HttpRawResponse(res)
     }
     
@@ -85,22 +77,10 @@ public struct UrlSessionHttpClient: HttpClient {
         if log {
             print(urlRequest.curlString)
         }
-
-        let res: (Data, URLResponse) = try await withUnsafeThrowingContinuation { c in
-            session.downloadTask(with: urlRequest) { url, response, error in
-                if let error = error {
-                    return c.resume(throwing: error)
-                }
-                guard let urlResponse = response, let url = url, let pathData = url.path.data(using: .utf8) else {
-                    return c.resume(throwing: HttpError.invalidResponse)
-                }
-                c.resume(returning: (pathData, urlResponse))
-            }
-            .resume()
+        let res: (URL, URLResponse) = try await session.download(for: urlRequest, delegate: nil)
+        guard let pathData = res.0.path.data(using: .utf8) else {
+            throw HttpError.invalidResponse
         }
-        return try HttpRawResponse(res)
+        return try HttpRawResponse((pathData, res.1))
     }
 }
-
-
-
