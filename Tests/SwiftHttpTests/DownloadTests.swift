@@ -16,6 +16,7 @@ final class DownloadTests: XCTestCase {
     
     func testDownload() async throws {
         let data = try await api.download()
-        XCTAssertFalse(data.isEmpty)
+        let filePath = String(data: data, encoding: .utf8)
+        XCTAssertFalse(filePath == nil)
     }
 }
