@@ -8,6 +8,7 @@
 import Foundation
 
 /// Default URLSession based implementation of the HttpClient protocol
+@available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *)
 public struct UrlSessionHttpClient: HttpClient {
     
     let session: URLSession
