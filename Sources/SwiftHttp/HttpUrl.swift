@@ -193,3 +193,17 @@ extension HttpUrl {
 		)
 	}
 }
+
+infix operator /?: MultiplicationPrecedence
+
+public func /(_ lhs: String, _ rhs: String) -> HttpUrl {
+	HttpUrl(scheme: lhs, host: rhs)
+}
+
+public func /(_ lhs: HttpUrl, _ rhs: String) -> HttpUrl {
+	lhs.path(rhs)
+}
+
+public func /?(_ lhs: HttpUrl, _ rhs: [String: String?]) -> HttpUrl {
+	lhs.query(rhs)
+}
