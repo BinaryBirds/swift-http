@@ -8,7 +8,6 @@
 import Foundation
 
 /// Default URLSession based implementation of the HttpClient protocol
-@available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *)
 public struct UrlSessionHttpClient: HttpClient {
     
     let session: URLSession
@@ -39,8 +38,22 @@ public struct UrlSessionHttpClient: HttpClient {
         if log {
             print(urlRequest.curlString)
         }
-        let res = try await session.data(for: urlRequest)
-        return try HttpRawResponse(res)
+			let res: (Data, URLResponse)
+			
+			if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *) {
+				res = try await session.data(for: urlRequest)
+			} else {
+				res = try await withCheckedThrowingContinuation { continuation in
+					session.dataTask(with: urlRequest) { data, response, error in
+						if let data = data, let response = response {
+							continuation.resume(returning: (data, response))
+						} else {
+							continuation.resume(throwing: error ?? HttpError.invalidResponse)
+						}
+					}
+				}
+			}
+			return try HttpRawResponse(res)
     }
     
     ///
@@ -60,7 +73,21 @@ public struct UrlSessionHttpClient: HttpClient {
         if log {
             print(urlRequest.curlString)
         }
-        let res: (Data, URLResponse) = try await session.upload(for: urlRequest, from: data, delegate: nil)
+			let res: (Data, URLResponse)
+			
+			if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *) {
+				res = try await session.upload(for: urlRequest, from: data, delegate: nil)
+			} else {
+				res = try await withCheckedThrowingContinuation { continuation in
+					session.uploadTask(with: urlRequest, from: data) { data, response, error in
+						if let data = data, let response = response {
+							continuation.resume(returning: (data, response))
+						} else {
+							continuation.resume(throwing: error ?? HttpError.invalidResponse)
+						}
+					}
+				}
+			}
         return try HttpRawResponse(res)
     }
     
@@ -78,7 +105,21 @@ public struct UrlSessionHttpClient: HttpClient {
         if log {
             print(urlRequest.curlString)
         }
-        let res: (URL, URLResponse) = try await session.download(for: urlRequest, delegate: nil)
+			let res: (URL, URLResponse)
+			
+			if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *) {
+				res = try await session.download(for: urlRequest, delegate: nil)
+			} else {
+				res = try await withCheckedThrowingContinuation { continuation in
+					session.downloadTask(with: urlRequest) { url, response, error in
+						if let url = url, let response = response {
+							continuation.resume(returning: (url, response))
+						} else {
+							continuation.resume(throwing: error ?? HttpError.invalidResponse)
+						}
+					}
+				}
+			}
         guard let pathData = res.0.path.data(using: .utf8) else {
             throw HttpError.invalidResponse
         }

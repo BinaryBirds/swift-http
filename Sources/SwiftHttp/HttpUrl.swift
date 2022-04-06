@@ -156,3 +156,40 @@ public extension HttpUrl {
         return url
     }
 }
+
+extension HttpUrl {
+	
+	/// Initialize a `HttpUrl` object with `string`
+	///
+	/// Returns `nil` if a `HttpUrl` cannot be formed with the string (for example, if the string contains characters that are illegal in a URL, or is an empty string).
+	public init?(string: String) {
+		if let url = URL(string: string) {
+			self.init(url: url)
+		} else {
+			return nil
+		}
+	}
+	
+	/// Initialize a `HttpUrl` object with `URL` object
+	///
+	/// Returns `nil` if a `HttpUrl` cannot be formed with the `URL` (for example, if the string contains characters that are illegal in a URL, or is an empty string).
+	public init?(url: URL) {
+		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return nil }
+		var path = components.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")).components(separatedBy: "/")
+		let resource: String?
+		if path.last?.contains(".") == true {
+			resource = path.removeLast()
+		} else {
+			resource = nil
+		}
+		self.init(
+			scheme: components.scheme ?? "https",
+			host: components.host ?? "",
+			port: components.port ?? 80,
+			path: path,
+			resource: resource,
+			query: components.queryItems.map({ Dictionary($0.map({ ($0.name, $0.value ?? "") })) { _, s in s } }) ?? [:],
+			fragment: components.fragment
+		)
+	}
+}
