@@ -51,6 +51,7 @@ public struct UrlSessionHttpClient: HttpClient {
 							continuation.resume(throwing: error ?? HttpError.invalidResponse)
 						}
 					}
+					.resume()
 				}
 			}
 			return try HttpRawResponse(res)
@@ -86,6 +87,7 @@ public struct UrlSessionHttpClient: HttpClient {
 							continuation.resume(throwing: error ?? HttpError.invalidResponse)
 						}
 					}
+					.resume()
 				}
 			}
         return try HttpRawResponse(res)
@@ -118,6 +120,7 @@ public struct UrlSessionHttpClient: HttpClient {
 							continuation.resume(throwing: error ?? HttpError.invalidResponse)
 						}
 					}
+					.resume()
 				}
 			}
         guard let pathData = res.0.path.data(using: .utf8) else {
