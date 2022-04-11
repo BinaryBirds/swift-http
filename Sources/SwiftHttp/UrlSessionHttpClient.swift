@@ -129,3 +129,9 @@ public struct UrlSessionHttpClient: HttpClient {
         return try HttpRawResponse((pathData, res.1))
     }
 }
+
+extension HttpClient where Self == UrlSessionHttpClient {
+	public static var urlSession: UrlSessionHttpClient {
+		UrlSessionHttpClient()
+	}
+}
