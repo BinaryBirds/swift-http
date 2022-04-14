@@ -50,8 +50,8 @@ public extension HttpRequestEncoder {
     ///
     static func json(_ encoder: JSONEncoder = .init(),
                      headers: [HttpHeaderKey: String] = [
-                         .key(.accept): "application/json",
-                         .key(.contentType): "application/json",
+                         .accept: "application/json",
+												 .contentType: "application/json",
                      ]) -> HttpRequestEncoder {
         .init(encoder: encoder, headers: headers)
     }

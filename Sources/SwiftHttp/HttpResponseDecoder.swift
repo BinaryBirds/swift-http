@@ -50,7 +50,7 @@ public extension HttpResponseDecoder {
     ///
     static func json(_ decoder: JSONDecoder = .init(),
                      validators: [HttpResponseValidator] = [
-                         HttpHeaderValidator(.key(.contentType)) {
+                         HttpHeaderValidator(.contentType) {
                              $0.contains("application/json")
                          },
                      ]) -> HttpResponseDecoder {
