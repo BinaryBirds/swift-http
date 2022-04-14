@@ -16,6 +16,9 @@ public struct HttpHeaderKey {
 	
 	public static func custom(_ key: String) -> HttpHeaderKey { HttpHeaderKey(key) }
 	
+	@available(*, deprecated, message: "Use key directly")
+	public static func key(_ key: HttpHeaderKey) -> HttpHeaderKey { key }
+	
 	/// Authorization header
 	public static let authorization: HttpHeaderKey = "Authorization"
 	
