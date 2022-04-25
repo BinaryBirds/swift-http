@@ -137,10 +137,12 @@ public extension HttpUrl {
         var path = "/" + path.joined(separator: "/")
         if let resource = resource {
             path += (resource.hasPrefix("/") ? resource : "/" + resource)
-        }
-        else {
+        } else {
             path += "/"
         }
+				if path.last == "/", !query.isEmpty {
+						path.removeLast()
+				}
         components.path = path
         components.fragment = fragment
         components.queryItems = query.map { .init(name: $0.key, value: $0.value) }
