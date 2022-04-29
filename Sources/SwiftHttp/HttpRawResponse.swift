@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// A HTTP response object with a raw data value
 public struct HttpRawResponse: HttpResponse {
