@@ -11,25 +11,25 @@ import Foundation
 public struct HttpUrl {
     
     /// Scheme of the url, e.g. https
-    public private(set) var scheme: String
+    public var scheme: String
     
     /// Hostname of the url, e.g. www.localhost.com
-    public private(set) var host: String
+    public var host: String
     
     /// Port of the url, e.g. 80
-    public private(set) var port: Int
+    public var port: Int
     
     /// Path components of the url, e.g. `/api/list = ["api", "list"]`
-    public private(set) var path: [String]
+    public var path: [String]
     
     /// Resource part of the url after the path components, e.g. `sitemap.xml`
-    public private(set) var resource: String?
+    public var resource: String?
     
     /// Query parameters, e.g. `?foo=bar`
-    public private(set) var query: [String: String]
+    public var query: [String: String]
     
     /// Fragment of the url, e.g. `#foo`
-    public private(set) var fragment: String?
+    public var fragment: String?
 
     ///
     /// Initialize a HttpUrl object
@@ -69,6 +69,19 @@ public extension HttpUrl {
     /// - Returns: A new HttpUrl object
     ///
     func path(_ values: String...) -> HttpUrl {
+        var newUrl = self
+        newUrl.path = path + values
+        return newUrl
+    }
+	
+    ///
+    /// Add new path components to a given url
+    ///
+    /// - Parameter values: The path components
+    ///
+    /// - Returns: A new HttpUrl object
+    ///
+    func path(_ values: [String]) -> HttpUrl {
         var newUrl = self
         newUrl.path = path + values
         return newUrl
