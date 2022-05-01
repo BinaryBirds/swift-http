@@ -61,6 +61,19 @@ public struct HttpUrl {
 
 public extension HttpUrl {
 
+	///
+	/// Add new path components to a given url
+	///
+	/// - Parameter values: The path components
+	///
+	/// - Returns: A new HttpUrl object
+	///
+	func scheme(_ value: String) -> HttpUrl {
+		var newUrl = self
+		newUrl.scheme = value
+		return newUrl
+	}
+	
     ///
     /// Add new path components to a given url
     ///
