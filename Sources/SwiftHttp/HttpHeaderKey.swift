@@ -230,31 +230,87 @@ extension HttpHeaderKey: Hashable, Codable, ExpressibleByStringLiteral, StringPr
 	public var utf8: String.UTF8View { rawValue.utf8 }
 	public var utf16: String.UTF16View { rawValue.utf16 }
 	public var unicodeScalars: String.UnicodeScalarView { rawValue.unicodeScalars }
-	
+    
+    /// Creates a new instance with the specified raw value.
+    /// - Parameter rawValue: The raw value to use for the new instance.
 	public init?(rawValue: String) { self.init(rawValue) }
-	
+    
+    /// Creates an instance initialized to the given string value.
+    ///
+    /// - Parameter value: The value of the new instance.
 	public init(stringLiteral value: String) { self.init(value) }
-	
+    
+    /// Creates a new instance by decoding from the given decoder.
+    ///
+    /// This initializer throws an error if reading from the decoder fails, or
+    /// if the data read is corrupted or otherwise invalid.
+    ///
+    /// - Parameter decoder: The decoder to read data from.
 	public init(from decoder: Decoder) throws {
 		try self.init(String(from: decoder))
 	}
-	
+    
+    /// Creates a string from the given Unicode code units in the specified
+    /// encoding.
+    ///
+    /// - Parameters:
+    ///   - codeUnits: A collection of code units encoded in the encoding
+    ///     specified in `sourceEncoding`.
+    ///   - sourceEncoding: The encoding in which `codeUnits` should be
+    ///     interpreted.
+
 	public init<C, Encoding>(decoding codeUnits: C, as sourceEncoding: Encoding.Type) where C : Collection, Encoding : _UnicodeEncoding, C.Element == Encoding.CodeUnit {
 		self.init(String(decoding: codeUnits, as: sourceEncoding))
 	}
-	
+    
+    /// Creates a string from the null-terminated, UTF-8 encoded sequence of
+    /// bytes at the given pointer.
+    ///
+    /// - Parameter nullTerminatedUTF8: A pointer to a sequence of contiguous,
+    ///   UTF-8 encoded bytes ending just before the first zero byte.
 	public init(cString nullTerminatedUTF8: UnsafePointer<CChar>) {
 		self.init(String(cString: nullTerminatedUTF8))
 	}
 	
+    /// Creates a string from the null-terminated sequence of bytes at the given
+    /// pointer.
+    ///
+    /// - Parameters:
+    ///   - nullTerminatedCodeUnits: A pointer to a sequence of contiguous code
+    ///     units in the encoding specified in `sourceEncoding`, ending just
+    ///     before the first zero code unit.
+    ///   - sourceEncoding: The encoding in which the code units should be
+    ///     interpreted.
 	public init<Encoding>(decodingCString nullTerminatedCodeUnits: UnsafePointer<Encoding.CodeUnit>, as sourceEncoding: Encoding.Type) where Encoding : _UnicodeEncoding {
 		self.init(String(decodingCString: nullTerminatedCodeUnits, as: sourceEncoding))
 	}
-	
+    
+    /// Hashes the essential components of this value by feeding them into the
+    /// given hasher.
+    ///
+    /// Implement this method to conform to the `Hashable` protocol. The
+    /// components used for hashing must be the same as the components compared
+    /// in your type's `==` operator implementation. Call `hasher.combine(_:)`
+    /// with each of these components.
+    ///
+    /// - Important: Never call `finalize()` on `hasher`. Doing so may become a
+    ///   compile-time error in the future.
+    ///
+    /// - Parameter hasher: The hasher to use when combining the components
+    ///   of this instance.
 	public func hash(into hasher: inout Hasher) {
 		rawValue.hash(into: &hasher)
 	}
-	
+    
+    /// Encodes this value into the given encoder.
+    ///
+    /// If the value fails to encode anything, `encoder` will encode an empty
+    /// keyed container in its place.
+    ///
+    /// This function throws an error if any values are invalid for the given
+    /// encoder's format.
+    ///
+    /// - Parameter encoder: The encoder to write data to.
 	public func encode(to encoder: Encoder) throws {
 		try rawValue.encode(to: encoder)
 	}

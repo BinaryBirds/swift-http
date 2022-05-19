@@ -4,10 +4,10 @@ import PackageDescription
 let package = Package(
     name: "swift-http",
     platforms: [
-			.macOS("10.15"),
-			.iOS("13.0"),
-			.tvOS("13.0"),
-			.watchOS("6.0")
+        .macOS(.v10_15),
+        .iOS(.v13),
+        .tvOS(.v13),
+        .watchOS(.v6)
     ],
     products: [
         .library(name: "SwiftHttp", targets: ["SwiftHttp"]),

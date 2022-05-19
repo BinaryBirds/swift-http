@@ -30,7 +30,7 @@ public struct HttpUrl {
     
     /// Fragment of the url, e.g. `#foo`
     public var fragment: String?
-
+    
     ///
     /// Initialize a HttpUrl object
     ///
@@ -60,20 +60,20 @@ public struct HttpUrl {
 }
 
 public extension HttpUrl {
-
-	///
-	/// Add new path components to a given url
-	///
-	/// - Parameter values: The path components
-	///
-	/// - Returns: A new HttpUrl object
-	///
-	func scheme(_ value: String) -> HttpUrl {
-		var newUrl = self
-		newUrl.scheme = value
-		return newUrl
-	}
-	
+    
+    ///
+    /// Add new path components to a given url
+    ///
+    /// - Parameter values: The path components
+    ///
+    /// - Returns: A new HttpUrl object
+    ///
+    func scheme(_ value: String) -> HttpUrl {
+        var newUrl = self
+        newUrl.scheme = value
+        return newUrl
+    }
+    
     ///
     /// Add new path components to a given url
     ///
@@ -86,7 +86,7 @@ public extension HttpUrl {
         newUrl.path = path + values
         return newUrl
     }
-	
+    
     ///
     /// Add new path components to a given url
     ///
@@ -99,7 +99,7 @@ public extension HttpUrl {
         newUrl.path = path + values
         return newUrl
     }
-
+    
     ///
     /// Add new query parameter values to the url
     ///
@@ -113,7 +113,7 @@ public extension HttpUrl {
         newUrl.query = newUrl.query.merging(finalQuery) { $1 }
         return newUrl
     }
-
+    
     ///
     /// Add a single query parameter value to the url
     ///
@@ -153,7 +153,7 @@ public extension HttpUrl {
     }
     
     // MARK: - URL
-
+    
     /// Returns the URL representation of the HttpUrl object
     var url: URL {
         var components = URLComponents()
@@ -166,9 +166,9 @@ public extension HttpUrl {
         } else {
             path += "/"
         }
-				if path.last == "/", !query.isEmpty {
-						path.removeLast()
-				}
+        if path.last == "/", !query.isEmpty {
+            path.removeLast()
+        }
         components.path = path
         components.fragment = fragment
         components.queryItems = query.map { .init(name: $0.key, value: $0.value) }
@@ -186,52 +186,38 @@ public extension HttpUrl {
 }
 
 extension HttpUrl {
-	
-	/// Initialize a `HttpUrl` object with `string`
-	///
-	/// Returns `nil` if a `HttpUrl` cannot be formed with the string (for example, if the string contains characters that are illegal in a URL, or is an empty string).
-	public init?(string: String) {
-		if let url = URL(string: string) {
-			self.init(url: url)
-		} else {
-			return nil
-		}
-	}
-	
-	/// Initialize a `HttpUrl` object with `URL` object
-	///
-	/// Returns `nil` if a `HttpUrl` cannot be formed with the `URL` (for example, if the string contains characters that are illegal in a URL, or is an empty string).
-	public init?(url: URL) {
-		guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return nil }
-		var path = components.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")).components(separatedBy: "/")
-		let resource: String?
-		if path.last?.contains(".") == true {
-			resource = path.removeLast()
-		} else {
-			resource = nil
-		}
-		self.init(
-			scheme: components.scheme ?? "https",
-			host: components.host ?? "",
-			port: components.port ?? 80,
-			path: path,
-			resource: resource,
-			query: components.queryItems.map({ Dictionary($0.map({ ($0.name, $0.value ?? "") })) { _, s in s } }) ?? [:],
-			fragment: components.fragment
-		)
-	}
-}
-
-infix operator /?: MultiplicationPrecedence
-
-public func /(_ lhs: String, _ rhs: String) -> HttpUrl {
-	HttpUrl(scheme: lhs, host: rhs)
-}
-
-public func /(_ lhs: HttpUrl, _ rhs: String) -> HttpUrl {
-	lhs.path(rhs)
-}
-
-public func /?(_ lhs: HttpUrl, _ rhs: [String: String?]) -> HttpUrl {
-	lhs.query(rhs)
+    
+    /// Initialize a `HttpUrl` object with `string`
+    ///
+    /// Returns `nil` if a `HttpUrl` cannot be formed with the string (for example, if the string contains characters that are illegal in a URL, or is an empty string).
+    public init?(string: String) {
+        if let url = URL(string: string) {
+            self.init(url: url)
+        } else {
+            return nil
+        }
+    }
+    
+    /// Initialize a `HttpUrl` object with `URL` object
+    ///
+    /// Returns `nil` if a `HttpUrl` cannot be formed with the `URL` (for example, if the string contains characters that are illegal in a URL, or is an empty string).
+    public init?(url: URL) {
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else { return nil }
+        var path = components.path.trimmingCharacters(in: CharacterSet(charactersIn: "/")).components(separatedBy: "/")
+        let resource: String?
+        if path.last?.contains(".") == true {
+            resource = path.removeLast()
+        } else {
+            resource = nil
+        }
+        self.init(
+            scheme: components.scheme ?? "https",
+            host: components.host ?? "",
+            port: components.port ?? 80,
+            path: path,
+            resource: resource,
+            query: components.queryItems.map({ Dictionary($0.map({ ($0.name, $0.value ?? "") })) { _, s in s } }) ?? [:],
+            fragment: components.fragment
+        )
+    }
 }

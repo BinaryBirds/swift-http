@@ -20,12 +20,12 @@ final class HttpUrlTests: XCTestCase {
         XCTAssertEqual(todoUrl.url.absoluteString, "https://jsonplaceholder.typicode.com/todos/1/")
         
         let query1Url = baseUrl.path("todos").query("foo", "bar")
-        XCTAssertEqual(query1Url.url.absoluteString, "https://jsonplaceholder.typicode.com/todos/?foo=bar")
+        XCTAssertEqual(query1Url.url.absoluteString, "https://jsonplaceholder.typicode.com/todos?foo=bar")
         
         let query2Url = baseUrl.path("todos").query([
             "foo": "1",
         ])
-        XCTAssertEqual(query2Url.url.absoluteString, "https://jsonplaceholder.typicode.com/todos/?foo=1")
+        XCTAssertEqual(query2Url.url.absoluteString, "https://jsonplaceholder.typicode.com/todos?foo=1")
     }
 }
 
