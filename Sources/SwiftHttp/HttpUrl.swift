@@ -62,9 +62,9 @@ public struct HttpUrl {
 public extension HttpUrl {
     
     ///
-    /// Add new path components to a given url
+    /// Add new scheme to a given url
     ///
-    /// - Parameter values: The path components
+    /// - Parameter values: The scheme
     ///
     /// - Returns: A new HttpUrl object
     ///
