@@ -27,5 +27,15 @@ final class HttpUrlTests: XCTestCase {
         ])
         XCTAssertEqual(query2Url.url.absoluteString, "https://jsonplaceholder.typicode.com/todos/?foo=1")
     }
+    
+    func testTrailingSlash() {
+        let baseUrl = HttpUrl(host: "jsonplaceholder.typicode.com", trailingSlashEnabled: false)
+        
+        let todosUrl = baseUrl.path("todos")
+        XCTAssertEqual(todosUrl.url.absoluteString, "https://jsonplaceholder.typicode.com/todos")
+
+        let query1Url = baseUrl.path("todos").query("foo", "bar")
+        XCTAssertEqual(query1Url.url.absoluteString, "https://jsonplaceholder.typicode.com/todos?foo=bar")
+    }
 }
 
