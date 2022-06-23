@@ -31,6 +31,9 @@ public struct HttpUrl {
     /// Fragment of the url, e.g. `#foo`
     public private(set) var fragment: String?
 
+    /// Appends trailing slash at the end of the path, e.g. `localhost.com/any/path/`
+    public private(set) var isTrailingSlashEnabled: Bool
+    
     ///
     /// Initialize a HttpUrl object
     ///
@@ -41,6 +44,7 @@ public struct HttpUrl {
     /// - Parameter resource: The  resource, default: `nil`
     /// - Parameter query: The  query, default: `[:]`
     /// - Parameter fragment: The  fragment, default: `nil`
+    /// - Parameter trailingSlashEnabled: Sets  ``HttpUrl/isTrailingSlashEnabled``, default: `true`
     ///
     public init(scheme: String = "https",
                 host: String,
@@ -48,7 +52,8 @@ public struct HttpUrl {
                 path: [String] = [],
                 resource: String? = nil,
                 query: [String : String] = [:],
-                fragment: String? = nil) {
+                fragment: String? = nil,
+                trailingSlashEnabled: Bool = true) {
         self.scheme = scheme
         self.host = host
         self.port = port
@@ -56,6 +61,7 @@ public struct HttpUrl {
         self.resource = resource
         self.query = query
         self.fragment = fragment
+        self.isTrailingSlashEnabled = trailingSlashEnabled
     }
 }
 
@@ -139,7 +145,9 @@ public extension HttpUrl {
             path += (resource.hasPrefix("/") ? resource : "/" + resource)
         }
         else {
-            path += "/"
+            if isTrailingSlashEnabled {
+                path += "/"
+            }
         }
         components.path = path
         components.fragment = fragment
