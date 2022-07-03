@@ -9,12 +9,12 @@ import Foundation
 
 /// A request encoder that can transform an encodable object into a request body and add headers to the request
 public struct HttpRequestEncoder<T: Encodable>: HttpRequestTransformer {
-
+    
     /// The response valdators
     public let headers: [HttpHeaderKey: String]
     
     let encoder: HttpDataEncoder
-
+    
     ///
     /// Initialize a request encoder
     ///
@@ -25,7 +25,7 @@ public struct HttpRequestEncoder<T: Encodable>: HttpRequestTransformer {
         self.encoder = encoder
         self.headers = headers
     }
-
+    
     ///
     /// Encodes the content value using the decoder
     ///
@@ -41,7 +41,7 @@ public struct HttpRequestEncoder<T: Encodable>: HttpRequestTransformer {
 }
 
 public extension HttpRequestEncoder {
-
+    
     ///
     /// Initialize a JSON request encoder
     ///
@@ -50,9 +50,9 @@ public extension HttpRequestEncoder {
     ///
     static func json(_ encoder: JSONEncoder = .init(),
                      headers: [HttpHeaderKey: String] = [
-                         .accept: "application/json",
-												 .contentType: "application/json",
+                        .accept: "application/json",
+                        .contentType: "application/json",
                      ]) -> HttpRequestEncoder {
-        .init(encoder: encoder, headers: headers)
-    }
+                         .init(encoder: encoder, headers: headers)
+                     }
 }
