@@ -29,7 +29,11 @@ public struct HttpUrl {
     public var query: [String: String]
     
     /// Fragment of the url, e.g. `#foo`
+    
     public var fragment: String?
+
+    /// Appends trailing slash at the end of the path, e.g. `localhost.com/any/path/`
+    public private(set) var isTrailingSlashEnabled: Bool
     
     ///
     /// Initialize a HttpUrl object
@@ -41,6 +45,7 @@ public struct HttpUrl {
     /// - Parameter resource: The  resource, default: `nil`
     /// - Parameter query: The  query, default: `[:]`
     /// - Parameter fragment: The  fragment, default: `nil`
+    /// - Parameter trailingSlashEnabled: Sets  ``HttpUrl/isTrailingSlashEnabled``, default: `true`
     ///
     public init(scheme: String = "https",
                 host: String,
@@ -48,7 +53,8 @@ public struct HttpUrl {
                 path: [String] = [],
                 resource: String? = nil,
                 query: [String : String] = [:],
-                fragment: String? = nil) {
+                fragment: String? = nil,
+                trailingSlashEnabled: Bool = true) {
         self.scheme = scheme
         self.host = host
         self.port = port
@@ -56,6 +62,7 @@ public struct HttpUrl {
         self.resource = resource
         self.query = query
         self.fragment = fragment
+        self.isTrailingSlashEnabled = trailingSlashEnabled
     }
 }
 
@@ -163,8 +170,11 @@ public extension HttpUrl {
         var path = "/" + path.joined(separator: "/")
         if let resource = resource {
             path += (resource.hasPrefix("/") ? resource : "/" + resource)
-        } else {
-            path += "/"
+        }
+        else {
+            if isTrailingSlashEnabled {
+                path += "/"
+            }
         }
         if path.last == "/", !query.isEmpty {
             path.removeLast()
