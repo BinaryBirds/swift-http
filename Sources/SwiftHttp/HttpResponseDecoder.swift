@@ -48,12 +48,14 @@ public extension HttpResponseDecoder {
     /// - Parameter decoder: The JSONDecoder object to use, the default is the built in JSONDecoder
     /// - Parameter validators: The array of validators, by default it validates the content type
     ///
-    static func json(_ decoder: JSONDecoder = .init(),
-                     validators: [HttpResponseValidator] = [
-                         HttpHeaderValidator(.key(.contentType)) {
-                             $0.contains("application/json")
-                         },
-                     ]) -> HttpResponseDecoder {
+    static func json(
+        _ decoder: JSONDecoder = .init(),
+        validators: [HttpResponseValidator] = [
+            HttpHeaderValidator(.contentType) {
+                $0.contains("application/json")
+            },
+        ]
+    ) -> HttpResponseDecoder {
         .init(decoder: decoder, validators: validators)
     }
 }

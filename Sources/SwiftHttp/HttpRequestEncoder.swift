@@ -48,11 +48,13 @@ public extension HttpRequestEncoder {
     /// - Parameter encoder: The JSONEncoder object to use, the default is the built in JSONEncoder
     /// - Parameter headers: The default accept and content type headers for a JSON request
     ///
-    static func json(_ encoder: JSONEncoder = .init(),
-                     headers: [HttpHeaderKey: String] = [
-                         .key(.accept): "application/json",
-                         .key(.contentType): "application/json",
-                     ]) -> HttpRequestEncoder {
+    static func json(
+        _ encoder: JSONEncoder = .init(),
+        headers: [HttpHeaderKey: String] = [
+            .accept: "application/json",
+            .contentType: "application/json",
+        ]
+    ) -> HttpRequestEncoder {
         .init(encoder: encoder, headers: headers)
     }
 }

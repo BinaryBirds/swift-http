@@ -2,27 +2,230 @@
 //  HttpHeaderKey.swift
 //  SwiftHttp
 //
-//  Created by Tibor Bodecs on 2022. 03. 10..
+//  Created by Tibor Bodecs on 2022. 01. 03..
 //
 
 import Foundation
 
-/// Type safe header key wrapper
-public enum HttpHeaderKey: Hashable {
-
-    /// Type safe key using a `HttpHeader` value
-    case key(HttpHeader)
+///
+/// Common HTTP header keys
+///
+/// For more details, please visit: [iana.org](https://www.iana.org/assignments/message-headers/message-headers.xhtml)
+///
+public struct HttpHeaderKey: RawRepresentable, Hashable {
     
-    /// Custom header key as a `String` value
-    case custom(String)
+    public let rawValue: String
     
-    /// Raw String value of the header key
-    public var rawValue: String {
-        switch self {
-        case .key(let header):
-            return header.rawValue
-        case .custom(let value):
-            return value
-        }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
     }
+}
+
+// MARK: - ExpressibleByStringLiteral
+extension HttpHeaderKey: ExpressibleByStringLiteral {
+    
+    public init(stringLiteral value: String) {
+        self.init(rawValue: value)
+    }
+}
+    
+public extension HttpHeaderKey {
+    /// Authorization header
+    static let authorization: HttpHeaderKey = "Authorization"
+    
+    /// Accept header
+    static let accept: HttpHeaderKey = "Accept"
+
+    /// Permanent Message Header Field Names
+    static let acceptLanguage: HttpHeaderKey = "Accept-Language"
+    static let alsoControl: HttpHeaderKey = "Also-Control"
+    static let alternateRecipient: HttpHeaderKey = "Alternate-Recipient"
+    static let approved: HttpHeaderKey = "Approved"
+    static let aRCAuthenticationResults: HttpHeaderKey = "ARC-Authentication-Results"
+    static let aRCMessageSignature: HttpHeaderKey = "ARC-Message-Signature"
+    static let aRCSeal: HttpHeaderKey = "ARC-Seal"
+    static let archive: HttpHeaderKey = "Archive"
+    static let archivedAt: HttpHeaderKey = "Archived-At"
+    static let articleNames: HttpHeaderKey = "Article-Names"
+    static let articleUpdates: HttpHeaderKey = "Article-Updates"
+    static let authenticationResults: HttpHeaderKey = "Authentication-Results"
+    static let autoSubmitted: HttpHeaderKey = "Auto-Submitted"
+    static let autoforwarded: HttpHeaderKey = "Autoforwarded"
+    static let autosubmitted: HttpHeaderKey = "Autosubmitted"
+    static let base: HttpHeaderKey = "Base"
+    static let bcc: HttpHeaderKey = "Bcc"
+    static let body: HttpHeaderKey = "Body"
+    static let cancelKey: HttpHeaderKey = "Cancel-Key"
+    static let cancelLock: HttpHeaderKey = "Cancel-Lock"
+    static let cc: HttpHeaderKey = "Cc"
+    static let comments: HttpHeaderKey = "Comments"
+    static let contentAlternative: HttpHeaderKey = "Content-Alternative"
+    static let contentBase: HttpHeaderKey = "Content-Base"
+    static let contentDescription: HttpHeaderKey = "Content-Description"
+    static let contentDisposition: HttpHeaderKey = "Content-Disposition"
+    static let contentDuration: HttpHeaderKey = "Content-Duration"
+    static let contentfeatures: HttpHeaderKey = "Content-features"
+    static let contentID: HttpHeaderKey = "Content-ID"
+    static let contentIdentifier: HttpHeaderKey = "Content-Identifier"
+    static let contentLanguage: HttpHeaderKey = "Content-Language"
+    static let contentLocation: HttpHeaderKey = "Content-Location"
+    static let contentMD5: HttpHeaderKey = "Content-MD5"
+    static let contentReturn: HttpHeaderKey = "Content-Return"
+    static let contentTransferEncoding: HttpHeaderKey = "Content-Transfer-Encoding"
+    static let contentTranslationType: HttpHeaderKey = "Content-Translation-Type"
+    static let contentType: HttpHeaderKey = "Content-Type"
+    static let control: HttpHeaderKey = "Control"
+    static let conversion: HttpHeaderKey = "Conversion"
+    static let conversionWithLoss: HttpHeaderKey = "Conversion-With-Loss"
+    static let dLExpansionHistory: HttpHeaderKey = "DL-Expansion-History"
+    static let date: HttpHeaderKey = "Date"
+    static let dateReceived: HttpHeaderKey = "Date-Received"
+    static let deferredDelivery: HttpHeaderKey = "Deferred-Delivery"
+    static let deliveryDate: HttpHeaderKey = "Delivery-Date"
+    static let discardedX400IPMSExtensions: HttpHeaderKey = "Discarded-X400-IPMS-Extensions"
+    static let discardedX400MTSExtensions: HttpHeaderKey = "Discarded-X400-MTS-Extensions"
+    static let discloseRecipients: HttpHeaderKey = "Disclose-Recipients"
+    static let dispositionNotificationOptions: HttpHeaderKey = "Disposition-Notification-Options"
+    static let dispositionNotificationTo: HttpHeaderKey = "Disposition-Notification-To"
+    static let distribution: HttpHeaderKey = "Distribution"
+    static let dKIMSignature: HttpHeaderKey = "DKIM-Signature"
+    static let downgradedBcc: HttpHeaderKey = "Downgraded-Bcc"
+    static let downgradedCc: HttpHeaderKey = "Downgraded-Cc"
+    static let downgradedDispositionNotificationTo: HttpHeaderKey = "Downgraded-Disposition-Notification-To"
+    static let downgradedFinalRecipient: HttpHeaderKey = "Downgraded-Final-Recipient"
+    static let downgradedFrom: HttpHeaderKey = "Downgraded-From"
+    static let downgradedInReplyTo: HttpHeaderKey = "Downgraded-In-Reply-To"
+    static let downgradedMailFrom: HttpHeaderKey = "Downgraded-Mail-From"
+    static let downgradedMessageId: HttpHeaderKey = "Downgraded-Message-Id"
+    static let downgradedOriginalRecipient: HttpHeaderKey = "Downgraded-Original-Recipient"
+    static let downgradedRcptTo: HttpHeaderKey = "Downgraded-Rcpt-To"
+    static let downgradedReferences: HttpHeaderKey = "Downgraded-References"
+    static let downgradedReplyTo: HttpHeaderKey = "Downgraded-Reply-To"
+    static let downgradedResentBcc: HttpHeaderKey = "Downgraded-Resent-Bcc"
+    static let downgradedResentCc: HttpHeaderKey = "Downgraded-Resent-Cc"
+    static let downgradedResentFrom: HttpHeaderKey = "Downgraded-Resent-From"
+    static let downgradedResentReplyTo: HttpHeaderKey = "Downgraded-Resent-Reply-To"
+    static let downgradedResentSender: HttpHeaderKey = "Downgraded-Resent-Sender"
+    static let downgradedResentTo: HttpHeaderKey = "Downgraded-Resent-To"
+    static let downgradedReturnPath: HttpHeaderKey = "Downgraded-Return-Path"
+    static let downgradedSender: HttpHeaderKey = "Downgraded-Sender"
+    static let downgradedTo: HttpHeaderKey = "Downgraded-To"
+    static let encoding: HttpHeaderKey = "Encoding"
+    static let encrypted: HttpHeaderKey = "Encrypted"
+    static let expires: HttpHeaderKey = "Expires"
+    static let expiryDate: HttpHeaderKey = "Expiry-Date"
+    static let followupTo: HttpHeaderKey = "Followup-To"
+    static let from: HttpHeaderKey = "From"
+    static let generateDeliveryReport: HttpHeaderKey = "Generate-Delivery-Report"
+    static let importance: HttpHeaderKey = "Importance"
+    static let inReplyTo: HttpHeaderKey = "In-Reply-To"
+    static let incompleteCopy: HttpHeaderKey = "Incomplete-Copy"
+    static let injectionDate: HttpHeaderKey = "Injection-Date"
+    static let injectionInfo: HttpHeaderKey = "Injection-Info"
+    static let keywords: HttpHeaderKey = "Keywords"
+    static let language: HttpHeaderKey = "Language"
+    static let latestDeliveryTime: HttpHeaderKey = "Latest-Delivery-Time"
+    static let lines: HttpHeaderKey = "Lines"
+    static let listArchive: HttpHeaderKey = "List-Archive"
+    static let listHelp: HttpHeaderKey = "List-Help"
+    static let listID: HttpHeaderKey = "List-ID"
+    static let listOwner: HttpHeaderKey = "List-Owner"
+    static let listPost: HttpHeaderKey = "List-Post"
+    static let listSubscribe: HttpHeaderKey = "List-Subscribe"
+    static let listUnsubscribe: HttpHeaderKey = "List-Unsubscribe"
+    static let listUnsubscribePost: HttpHeaderKey = "List-Unsubscribe-Post"
+    static let messageContext: HttpHeaderKey = "Message-Context"
+    static let messageID: HttpHeaderKey = "Message-ID"
+    static let messageType: HttpHeaderKey = "Message-Type"
+    static let mIMEVersion: HttpHeaderKey = "MIME-Version"
+    static let mMHSExemptedAddress: HttpHeaderKey = "MMHS-Exempted-Address"
+    static let mMHSExtendedAuthorisationInfo: HttpHeaderKey = "MMHS-Extended-Authorisation-Info"
+    static let mMHSSubjectIndicatorCodes: HttpHeaderKey = "MMHS-Subject-Indicator-Codes"
+    static let mMHSHandlingInstructions: HttpHeaderKey = "MMHS-Handling-Instructions"
+    static let mMHSMessageInstructions: HttpHeaderKey = "MMHS-Message-Instructions"
+    static let mMHSCodressMessageIndicator: HttpHeaderKey = "MMHS-Codress-Message-Indicator"
+    static let mMHSOriginatorReference: HttpHeaderKey = "MMHS-Originator-Reference"
+    static let mMHSPrimaryPrecedence: HttpHeaderKey = "MMHS-Primary-Precedence"
+    static let mMHSCopyPrecedence: HttpHeaderKey = "MMHS-Copy-Precedence"
+    static let mMHSMessageType: HttpHeaderKey = "MMHS-Message-Type"
+    static let mMHSOtherRecipientsIndicatorTo: HttpHeaderKey = "MMHS-Other-Recipients-Indicator-To"
+    static let mMHSOtherRecipientsIndicatorCC: HttpHeaderKey = "MMHS-Other-Recipients-Indicator-CC"
+    static let mMHSAcp127MessageIdentifier: HttpHeaderKey = "MMHS-Acp127-Message-Identifier"
+    static let mMHSOriginatorPLAD: HttpHeaderKey = "MMHS-Originator-PLAD"
+    static let mTPriority: HttpHeaderKey = "MT-Priority"
+    static let newsgroups: HttpHeaderKey = "Newsgroups"
+    static let nNTPPostingDate: HttpHeaderKey = "NNTP-Posting-Date"
+    static let nNTPPostingHost: HttpHeaderKey = "NNTP-Posting-Host"
+    static let obsoletes: HttpHeaderKey = "Obsoletes"
+    static let organization: HttpHeaderKey = "Organization"
+    static let originalEncodedInformationTypes: HttpHeaderKey = "Original-Encoded-Information-Types"
+    static let originalFrom: HttpHeaderKey = "Original-From"
+    static let originalMessageID: HttpHeaderKey = "Original-Message-ID"
+    static let originalRecipient: HttpHeaderKey = "Original-Recipient"
+    static let originalSender: HttpHeaderKey = "Original-Sender"
+    static let originatorReturnAddress: HttpHeaderKey = "Originator-Return-Address"
+    static let originalSubject: HttpHeaderKey = "Original-Subject"
+    static let path: HttpHeaderKey = "Path"
+    static let pICSLabel: HttpHeaderKey = "PICS-Label"
+    static let postingVersion: HttpHeaderKey = "Posting-Version"
+    static let preventNonDeliveryReport: HttpHeaderKey = "Prevent-NonDelivery-Report"
+    static let priority: HttpHeaderKey = "Priority"
+    static let received: HttpHeaderKey = "Received"
+    static let receivedSPF: HttpHeaderKey = "Received-SPF"
+    static let references: HttpHeaderKey = "References"
+    static let relayVersion: HttpHeaderKey = "Relay-Version"
+    static let replyBy: HttpHeaderKey = "Reply-By"
+    static let replyTo: HttpHeaderKey = "Reply-To"
+    static let requireRecipientValidSince: HttpHeaderKey = "Require-Recipient-Valid-Since"
+    static let resentBcc: HttpHeaderKey = "Resent-Bcc"
+    static let resentCc: HttpHeaderKey = "Resent-Cc"
+    static let resentDate: HttpHeaderKey = "Resent-Date"
+    static let resentFrom: HttpHeaderKey = "Resent-From"
+    static let resentMessageID: HttpHeaderKey = "Resent-Message-ID"
+    static let resentReplyTo: HttpHeaderKey = "Resent-Reply-To"
+    static let resentSender: HttpHeaderKey = "Resent-Sender"
+    static let resentTo: HttpHeaderKey = "Resent-To"
+    static let returnPath: HttpHeaderKey = "Return-Path"
+    static let seeAlso: HttpHeaderKey = "See-Also"
+    static let sender: HttpHeaderKey = "Sender"
+    static let sensitivity: HttpHeaderKey = "Sensitivity"
+    static let solicitation: HttpHeaderKey = "Solicitation"
+    static let subject: HttpHeaderKey = "Subject"
+    static let summary: HttpHeaderKey = "Summary"
+    static let supersedes: HttpHeaderKey = "Supersedes"
+    static let tLSReportDomain: HttpHeaderKey = "TLS-Report-Domain"
+    static let tLSReportSubmitter: HttpHeaderKey = "TLS-Report-Submitter"
+    static let tLSRequired: HttpHeaderKey = "TLS-Required"
+    static let to: HttpHeaderKey = "To"
+    static let userAgent: HttpHeaderKey = "User-Agent"
+    static let vBRInfo: HttpHeaderKey = "VBR-Info"
+    static let x400ContentIdentifier: HttpHeaderKey = "X400-Content-Identifier"
+    static let x400ContentReturn: HttpHeaderKey = "X400-Content-Return"
+    static let x400ContentType: HttpHeaderKey = "X400-Content-Type"
+    static let x400MTSIdentifier: HttpHeaderKey = "X400-MTS-Identifier"
+    static let x400Originator: HttpHeaderKey = "X400-Originator"
+    static let x400Received: HttpHeaderKey = "X400-Received"
+    static let x400Recipients: HttpHeaderKey = "X400-Recipients"
+    static let x400Trace: HttpHeaderKey = "X400-Trace"
+    static let xrefcase: HttpHeaderKey = "Xrefcase"
+    /// Provisional Message Header Field Names
+    static let apparentlyTo: HttpHeaderKey = "Apparently-To"
+    static let author: HttpHeaderKey = "Author"
+    static let eDIINTFeatures: HttpHeaderKey = "EDIINT-Features"
+    static let eesstVersion: HttpHeaderKey = "Eesst-Version"
+    static let errorsTo: HttpHeaderKey = "Errors-To"
+    static let formSub: HttpHeaderKey = "Form-Sub"
+    static let jabberID: HttpHeaderKey = "Jabber-ID"
+    static let mMHSAuthorizingUsers: HttpHeaderKey = "MMHS-Authorizing-Users"
+    static let privicon: HttpHeaderKey = "Privicon"
+    static let sIOLabel: HttpHeaderKey = "SIO-Label"
+    static let sIOLabelHistory: HttpHeaderKey = "SIO-Label-History"
+    static let xArchivedAt: HttpHeaderKey = "X-Archived-At"
+    static let xMittente: HttpHeaderKey = "X-Mittente"
+    static let xPGPSig: HttpHeaderKey = "X-PGP-Sig"
+    static let xRicevuta: HttpHeaderKey = "X-Ricevuta"
+    static let xRiferimentoMessageID: HttpHeaderKey = "X-Riferimento-Message-ID"
+    static let xTipoRicevuta: HttpHeaderKey = "X-TipoRicevuta"
+    static let xTrasporto: HttpHeaderKey = "X-Trasporto"
+    static let xVerificaSicurezza: HttpHeaderKey = "X-VerificaSicurezza"
 }
