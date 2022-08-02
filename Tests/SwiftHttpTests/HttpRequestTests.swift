@@ -20,7 +20,7 @@ final class HttpRequestTests: XCTestCase {
         let req = HttpRawRequest(url: url,
                                  method: .post,
                                  headers: [
-                                    .key(.authorization): "Bearer \(token)",
+                                    .authorization: "Bearer \(token)",
                                  ],
                                  body: body)
         

@@ -47,10 +47,7 @@ public struct HttpRawResponse: HttpResponse {
         for header in response.allHeaderFields {
             let key = String(describing: header.key)
             let value = String(describing: header.value)
-            var headerKey: HttpHeaderKey = .custom(key)
-            if let keyValue = HttpHeader(rawValue: key) {
-                headerKey = .key(keyValue)
-            }
+            let headerKey = HttpHeaderKey(rawValue: key)
             headers[headerKey] = value
         }
         guard let statusCode = HttpStatusCode(rawValue: response.statusCode) else {

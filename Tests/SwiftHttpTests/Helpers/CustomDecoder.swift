@@ -12,7 +12,7 @@ public extension HttpResponseDecoder {
     
     static func custom() -> HttpResponseDecoder {
         .init(decoder: CustomDataDecoder(), validators: [
-            HttpHeaderValidator(.key(.contentType)) {
+            HttpHeaderValidator(.contentType) {
                 $0.contains("application/json")
             },
         ])
