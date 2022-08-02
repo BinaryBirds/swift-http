@@ -1,5 +1,5 @@
 //
-//  HttpHeader.swift
+//  HttpHeaderKey.swift
 //  SwiftHttp
 //
 //  Created by Tibor Bodecs on 2022. 01. 03..
