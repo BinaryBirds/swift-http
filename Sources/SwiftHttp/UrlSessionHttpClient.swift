@@ -120,7 +120,7 @@ public struct UrlSessionHttpClient: HttpClient {
         return try HttpRawResponse((pathData, res.1))
     }
     
-    private func asyncMethod<T, S: URLSessionTask>(with urlRequest: URLRequest, _ method: @escaping (URLRequest, @escaping (T?, URLResponse?, Error?) -> Void) -> S) async throws -> (T, URLResponse) {
+    private func asyncMethod<T, S: URLSessionTask>(with urlRequest: URLRequest, _ method: @escaping (URLRequest, @escaping @Sendable (T?, URLResponse?, Error?) -> Void) -> S) async throws -> (T, URLResponse) {
         try await withCheckedThrowingContinuation { continuation in
             method(urlRequest) { t, response, error in
                 if let t = t, let response = response {
