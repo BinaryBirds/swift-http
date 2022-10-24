@@ -219,17 +219,9 @@ public struct HttpHeaderKey {
 	public static let xVerificaSicurezza: HttpHeaderKey = "X-VerificaSicurezza"
 }
 
-extension HttpHeaderKey: Hashable, Codable, ExpressibleByStringLiteral, StringProtocol, RawRepresentable, CustomStringConvertible {
-	public typealias UTF8View = String.UTF8View
-	public typealias UTF16View = String.UTF16View
-	public typealias UnicodeScalarView = String.UnicodeScalarView
+extension HttpHeaderKey: Hashable, Codable, ExpressibleByStringLiteral, RawRepresentable, CustomStringConvertible {
 	
 	public var description: String { rawValue }
-	public var startIndex: String.Index { rawValue.startIndex }
-	public var endIndex: String.Index { rawValue.endIndex }
-	public var utf8: String.UTF8View { rawValue.utf8 }
-	public var utf16: String.UTF16View { rawValue.utf16 }
-	public var unicodeScalars: String.UnicodeScalarView { rawValue.unicodeScalars }
     
     /// Creates a new instance with the specified raw value.
     /// - Parameter rawValue: The raw value to use for the new instance.
@@ -249,42 +241,7 @@ extension HttpHeaderKey: Hashable, Codable, ExpressibleByStringLiteral, StringPr
 	public init(from decoder: Decoder) throws {
 		try self.init(String(from: decoder))
 	}
-    
-    /// Creates a string from the given Unicode code units in the specified
-    /// encoding.
-    ///
-    /// - Parameters:
-    ///   - codeUnits: A collection of code units encoded in the encoding
-    ///     specified in `sourceEncoding`.
-    ///   - sourceEncoding: The encoding in which `codeUnits` should be
-    ///     interpreted.
-
-	public init<C, Encoding>(decoding codeUnits: C, as sourceEncoding: Encoding.Type) where C : Collection, Encoding : _UnicodeEncoding, C.Element == Encoding.CodeUnit {
-		self.init(String(decoding: codeUnits, as: sourceEncoding))
-	}
-    
-    /// Creates a string from the null-terminated, UTF-8 encoded sequence of
-    /// bytes at the given pointer.
-    ///
-    /// - Parameter nullTerminatedUTF8: A pointer to a sequence of contiguous,
-    ///   UTF-8 encoded bytes ending just before the first zero byte.
-	public init(cString nullTerminatedUTF8: UnsafePointer<CChar>) {
-		self.init(String(cString: nullTerminatedUTF8))
-	}
-	
-    /// Creates a string from the null-terminated sequence of bytes at the given
-    /// pointer.
-    ///
-    /// - Parameters:
-    ///   - nullTerminatedCodeUnits: A pointer to a sequence of contiguous code
-    ///     units in the encoding specified in `sourceEncoding`, ending just
-    ///     before the first zero code unit.
-    ///   - sourceEncoding: The encoding in which the code units should be
-    ///     interpreted.
-	public init<Encoding>(decodingCString nullTerminatedCodeUnits: UnsafePointer<Encoding.CodeUnit>, as sourceEncoding: Encoding.Type) where Encoding : _UnicodeEncoding {
-		self.init(String(decodingCString: nullTerminatedCodeUnits, as: sourceEncoding))
-	}
-    
+   
     /// Hashes the essential components of this value by feeding them into the
     /// given hasher.
     ///
@@ -313,45 +270,5 @@ extension HttpHeaderKey: Hashable, Codable, ExpressibleByStringLiteral, StringPr
     /// - Parameter encoder: The encoder to write data to.
 	public func encode(to encoder: Encoder) throws {
 		try rawValue.encode(to: encoder)
-	}
-	
-	public subscript(position: String.Index) -> Character {
-		rawValue[position]
-	}
-	
-	public subscript(bounds: Range<String.Index>) -> Substring {
-		rawValue[bounds]
-	}
-	
-	public mutating func write(_ string: String) {
-		rawValue.write(string)
-	}
-	
-	public func lowercased() -> String {
-		rawValue.lowercased()
-	}
-	
-	public func uppercased() -> String {
-		rawValue.uppercased()
-	}
-	
-	public func write<Target>(to target: inout Target) where Target : TextOutputStream {
-		rawValue.write(to: &target)
-	}
-	
-	public func withCString<Result>(_ body: (UnsafePointer<CChar>) throws -> Result) rethrows -> Result {
-		try rawValue.withCString(body)
-	}
-	
-	public func withCString<Result, Encoding>(encodedAs targetEncoding: Encoding.Type, _ body: (UnsafePointer<Encoding.CodeUnit>) throws -> Result) rethrows -> Result where Encoding : _UnicodeEncoding {
-		try rawValue.withCString(encodedAs: targetEncoding, body)
-	}
-	
-	public func index(after i: String.Index) -> String.Index {
-		rawValue.index(after: i)
-	}
-	
-	public func index(before i: String.Index) -> String.Index {
-		rawValue.index(before: i)
 	}
 }

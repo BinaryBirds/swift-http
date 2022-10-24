@@ -133,9 +133,3 @@ public struct UrlSessionHttpClient: HttpClient {
         }
     }
 }
-
-extension HttpClient where Self == UrlSessionHttpClient {
-    public static var urlSession: UrlSessionHttpClient {
-        UrlSessionHttpClient()
-    }
-}
