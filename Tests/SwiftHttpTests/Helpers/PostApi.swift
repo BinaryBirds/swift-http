@@ -9,16 +9,38 @@ import Foundation
 import SwiftHttp
 
 struct PostApi: HttpCodablePipelineCollection {
+    
+//    struct Failure: Codable {
+//        let message: String
+//    }
 
     let client: HttpClient = UrlSessionHttpClient(log: true)
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
-
+    
+    /// NOTE: this API call should return a 404 response
+    func invalidApiCall() async throws -> [Post] {
+        try await decodableRequest(executor: client.dataTask,
+                                   url: apiBaseUrl.path("invalid-posts"),
+                                   method: .get)
+    }
     
     func listPosts() async throws -> [Post] {
         try await decodableRequest(executor: client.dataTask,
                                    url: apiBaseUrl.path("posts"),
                                    method: .get)
     }
+    
+    func filterPosts(_ userId: Int) async throws -> [Post] {
+        try await decodableRequest(
+            executor: client.dataTask,
+            url: apiBaseUrl
+                .path("posts")
+                .query([
+                    "userId": String(userId),
+                ]),
+            method: .get)
+    }
+    
     
     func getPost(_ id: Int) async throws -> Post {
         try await decodableRequest(executor: client.dataTask,

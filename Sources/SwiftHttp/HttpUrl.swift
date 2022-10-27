@@ -168,6 +168,7 @@ public extension HttpUrl {
         components.host = host
         components.port = port
         var path = "/" + path.joined(separator: "/")
+
         if let resource = resource {
             path += (resource.hasPrefix("/") ? resource : "/" + resource)
         }
@@ -176,9 +177,9 @@ public extension HttpUrl {
                 path += "/"
             }
         }
-        if path.last == "/", !query.isEmpty {
-            path.removeLast()
-        }
+//        if !isTrailingSlashEnabled, path.last == "/", !query.isEmpty {
+//            path.removeLast()
+//        }
         components.path = path
         components.fragment = fragment
         components.queryItems = query.map { .init(name: $0.key, value: $0.value) }

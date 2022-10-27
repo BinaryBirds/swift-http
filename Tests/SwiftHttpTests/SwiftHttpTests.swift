@@ -31,29 +31,22 @@ final class SwiftHttpTests: XCTestCase {
     }
     
     func testError() async throws {
-        let api = FeatherApi()
+        let api = PostApi()
         do {
-            _ = try await api.test()
+            _ = try await api.invalidApiCall()
         }
         catch HttpError.invalidStatusCode(let res) {
-            let decoder = HttpResponseDecoder<FeatherError>(decoder: JSONDecoder())
-            do {
-                let error = try decoder.decode(res.data)
-                print(res.statusCode, error)
-            }
-            catch {
-                print(error.localizedDescription)
-            }
+            XCTAssertEqual(res.statusCode, .notFound)
         }
         catch {
-            print(error.localizedDescription)
+            XCTFail(error.localizedDescription)
         }
     }
     
     func testQueryParams() async throws {
-        let api = FeatherApi()
-        let res = try await api.testQueryParams()
-        XCTAssertEqual(res, "ok")
+        let api = PostApi()
+        let res = try await api.filterPosts(1)
+        XCTAssertEqual(res.count, 10)
     }
 }
 
