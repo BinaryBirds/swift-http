@@ -46,10 +46,10 @@ final class HttpValidationTests: XCTestCase {
     func testHeaderValidator() async throws {
         let response = HttpRawResponse(statusCode: .ok,
                                        headers: [
-                                        .key(.contentType): "application/json",
+                                        .contentType: "application/json",
                                        ],
                                        data: .init())
-        let validator = HttpHeaderValidator(.key(.contentType)) { value in
+        let validator = HttpHeaderValidator(.contentType) { value in
             value == "application/json"
         }
         try validator.validate(response)
@@ -58,10 +58,10 @@ final class HttpValidationTests: XCTestCase {
     func testInvalidHeaderValidator() async throws {
         let response = HttpRawResponse(statusCode: .ok,
                                        headers: [
-                                        .key(.contentType): "application/json",
+                                        .contentType: "application/json",
                                        ],
                                        data: .init())
-        let validator = HttpHeaderValidator(.key(.contentType)) { value in
+        let validator = HttpHeaderValidator(.contentType) { value in
             value == "application/xml"
         }
         do {
@@ -76,12 +76,12 @@ final class HttpValidationTests: XCTestCase {
     func testMultipleValidation() async throws {
         let response = HttpRawResponse(statusCode: .ok,
                                        headers: [
-                                        .key(.contentType): "application/json",
+                                        .contentType: "application/json",
                                        ],
                                        data: .init())
         
         let validator1 = HttpStatusCodeValidator(.ok)
-        let validator2 = HttpHeaderValidator(.key(.contentType)) { value in
+        let validator2 = HttpHeaderValidator(.contentType) { value in
             value == "application/json"
         }
         let validation = HttpResponseValidation([validator1, validator2])

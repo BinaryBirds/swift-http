@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// A HTTP response object with a raw data value
 public struct HttpRawResponse: HttpResponse {
@@ -47,10 +50,7 @@ public struct HttpRawResponse: HttpResponse {
         for header in response.allHeaderFields {
             let key = String(describing: header.key)
             let value = String(describing: header.value)
-            var headerKey: HttpHeaderKey = .custom(key)
-            if let keyValue = HttpHeader(rawValue: key) {
-                headerKey = .key(keyValue)
-            }
+            let headerKey: HttpHeaderKey = .custom(key)
             headers[headerKey] = value
         }
         guard let statusCode = HttpStatusCode(rawValue: response.statusCode) else {

@@ -6,6 +6,9 @@
 //
 
 import Foundation
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 /// Default URLSession based implementation of the HttpClient protocol
 public struct UrlSessionHttpClient: HttpClient {
@@ -23,7 +26,7 @@ public struct UrlSessionHttpClient: HttpClient {
         self.session = session
         self.log = log
     }
-
+    
     ///
     /// Performs a data task (in memory) HTTP request
     ///
@@ -38,7 +41,17 @@ public struct UrlSessionHttpClient: HttpClient {
         if log {
             print(urlRequest.curlString)
         }
-        let res = try await session.data(for: urlRequest)
+        let res: (Data, URLResponse)
+        
+#if os(Linux)
+        res = try await asyncMethod(with: urlRequest, session.dataTask)
+#else
+        if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *) {
+            res = try await session.data(for: urlRequest)
+        } else {
+            res = try await asyncMethod(with: urlRequest, session.dataTask)
+        }
+#endif
         return try HttpRawResponse(res)
     }
     
@@ -59,7 +72,21 @@ public struct UrlSessionHttpClient: HttpClient {
         if log {
             print(urlRequest.curlString)
         }
-        let res: (Data, URLResponse) = try await session.upload(for: urlRequest, from: data, delegate: nil)
+        let res: (Data, URLResponse)
+        
+#if os(Linux)
+        res = try await asyncMethod(with: urlRequest) {
+            session.uploadTask(with: $0, from: data, completionHandler: $1)
+        }
+#else
+        if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *) {
+            res = try await session.upload(for: urlRequest, from: data, delegate: nil)
+        } else {
+            res = try await asyncMethod(with: urlRequest) {
+                session.uploadTask(with: $0, from: data, completionHandler: $1)
+            }
+        }
+#endif
         return try HttpRawResponse(res)
     }
     
@@ -77,10 +104,32 @@ public struct UrlSessionHttpClient: HttpClient {
         if log {
             print(urlRequest.curlString)
         }
-        let res: (URL, URLResponse) = try await session.download(for: urlRequest, delegate: nil)
+        let res: (URL, URLResponse)
+#if os(Linux)
+        res = try await asyncMethod(with: urlRequest, session.downloadTask)
+#else
+        if #available(iOS 15.0, tvOS 15.0, watchOS 8.0, macOS 12.0, *) {
+            res = try await session.download(for: urlRequest, delegate: nil)
+        } else {
+            res = try await asyncMethod(with: urlRequest, session.downloadTask)
+        }
+#endif
         guard let pathData = res.0.path.data(using: .utf8) else {
             throw HttpError.invalidResponse
         }
         return try HttpRawResponse((pathData, res.1))
+    }
+    
+    private func asyncMethod<T, S: URLSessionTask>(with urlRequest: URLRequest, _ method: @escaping (URLRequest, @escaping @Sendable (T?, URLResponse?, Error?) -> Void) -> S) async throws -> (T, URLResponse) {
+        try await withCheckedThrowingContinuation { continuation in
+            method(urlRequest) { t, response, error in
+                if let t = t, let response = response {
+                    continuation.resume(returning: (t, response))
+                } else {
+                    continuation.resume(throwing: error ?? HttpError.invalidResponse)
+                }
+            }
+            .resume()
+        }
     }
 }
