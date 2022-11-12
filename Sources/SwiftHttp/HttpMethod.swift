@@ -10,7 +10,7 @@
 ///
 /// For more details, please visit: [iana.org](https://www.iana.org/assignments/http-methods/http-methods.xhtml)
 ///
-public enum HttpMethod: String {
+public enum HttpMethod: String, Codable, Hashable {
     
     case acl
     case baselineControl = "baseline-control"

@@ -66,6 +66,25 @@ public struct HttpUrl {
     }
 }
 
+extension HttpUrl: Equatable {
+}
+
+extension HttpUrl: Hashable {
+}
+
+extension HttpUrl: Encodable {
+}
+
+extension HttpUrl: Decodable {
+}
+
+extension HttpUrl: CustomStringConvertible {
+    
+    public var description: String {
+        url.description
+    }
+}
+
 public extension HttpUrl {
     
     ///
