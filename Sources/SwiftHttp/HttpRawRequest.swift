@@ -41,6 +41,9 @@ public struct HttpRawRequest: HttpRequest {
     }
 }
 
+extension HttpRawRequest: Codable, Equatable {
+}
+
 public extension HttpRawRequest {
 
     ///

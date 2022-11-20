@@ -10,7 +10,7 @@
 ///
 /// For more details, please visit: [iana.org](http://www.iana.org/assignments/http-status-codes)
 ///
-public enum HttpStatusCode: Int {
+public enum HttpStatusCode: Int, Codable, Equatable {
     // 1xx
     case `continue`                     = 100
     case switchingProtocols             = 101

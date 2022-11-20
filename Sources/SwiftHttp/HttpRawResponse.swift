@@ -60,3 +60,5 @@ public struct HttpRawResponse: HttpResponse {
     }
 }
 
+extension HttpRawResponse: Codable, Equatable {
+}
