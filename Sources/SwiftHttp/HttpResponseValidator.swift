@@ -9,7 +9,7 @@ import Foundation
 
 /// A generic response validator protocol
 public protocol HttpResponseValidator {
-    
+
     ///
     /// Validates a response object
     ///
@@ -19,4 +19,3 @@ public protocol HttpResponseValidator {
     ///
     func validate(_ response: HttpResponse) throws
 }
-

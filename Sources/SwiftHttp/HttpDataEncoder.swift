@@ -9,7 +9,7 @@ import Foundation
 
 /// Encodes an encodable object into a HTTP data representation
 public protocol HttpDataEncoder {
-    
+
     ///
     /// Encodes the object value into raw HTTP data
     ///
@@ -19,7 +19,7 @@ public protocol HttpDataEncoder {
     ///
     /// - Returns: The encoded data value
     ///
-    func encode<T>(_ value: T) throws -> Data where T : Encodable
+    func encode<T>(_ value: T) throws -> Data where T: Encodable
 }
 
 /// The JSON encoder is already a valid HTTP data encoder

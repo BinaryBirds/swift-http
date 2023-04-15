@@ -9,28 +9,28 @@ import Foundation
 
 /// A generic error object to transfer HTTP related error messages
 public enum HttpError: LocalizedError {
-    
+
     /// The response is not a valid HTTP response
     case invalidResponse
-    
+
     /// The response has a unknown status code
     case unknownStatusCode
-    
+
     /// The response has an invalid status code
     case invalidStatusCode(HttpResponse)
-    
+
     /// The response is missing a header
     case missingHeader(HttpResponse)
-    
+
     /// The response has an invalid header value
     case invalidHeaderValue(HttpResponse)
-    
+
     /// Upload request does not have data to send
     case missingUploadData
-    
+
     /// Unknown error
     case unknown(Error)
-    
+
     /// Proper error descriptions  for the HttpError values
     public var errorDescription: String? {
         switch self {

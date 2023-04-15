@@ -9,9 +9,9 @@ import Foundation
 
 /// Validates a HttpResponse using an array of validators
 public struct HttpResponseValidation {
-    
+
     let validators: [HttpResponseValidator]
-    
+
     ///
     /// Initialize a new validation object using an array of validators
     ///

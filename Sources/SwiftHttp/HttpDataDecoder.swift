@@ -9,7 +9,7 @@ import Foundation
 
 /// A generic HTTP data decoder
 public protocol HttpDataDecoder {
-    
+
     ///
     /// Decodes the response data into a custom decodable object
     ///
@@ -20,7 +20,8 @@ public protocol HttpDataDecoder {
     ///
     /// - Returns: The decoded object
     ///
-    func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable
+    func decode<T>(_ type: T.Type, from data: Data) throws -> T
+    where T: Decodable
 }
 
 /// The JSON decoder is already a valid HTTP data decoder

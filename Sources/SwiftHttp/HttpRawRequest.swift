@@ -12,13 +12,13 @@ public struct HttpRawRequest: HttpRequest {
 
     /// The method to use when sending the request
     public var method: HttpMethod
-    
+
     /// The url to send the request
     public var url: HttpUrl
-    
+
     /// The HTTP header fields for the request
     public var headers: [HttpHeaderKey: String]
-    
+
     /// The HTTP body as a raw data value
     public var body: Data?
 
@@ -46,7 +46,7 @@ public struct HttpRawRequest: HttpRequest {
 extension HttpRawRequest: Codable, Equatable {
 }
 
-public extension HttpRawRequest {
+extension HttpRawRequest {
 
     ///
     /// Change the method of the request
@@ -55,7 +55,7 @@ public extension HttpRawRequest {
     ///
     /// - Returns: A new request object with the updated method
     ///
-    func method(_ method: HttpMethod) -> HttpRawRequest {
+    public func method(_ method: HttpMethod) -> HttpRawRequest {
         .init(url: url, method: method, headers: headers, body: body)
     }
 
@@ -67,12 +67,13 @@ public extension HttpRawRequest {
     ///
     /// - Returns: A new request object with the updated headers
     ///
-    func header(_ key: HttpHeaderKey, _ value: String) -> HttpRawRequest {
+    public func header(_ key: HttpHeaderKey, _ value: String) -> HttpRawRequest
+    {
         var newHeaders = headers
         newHeaders[key] = value
         return .init(url: url, method: method, headers: newHeaders, body: body)
     }
-    
+
     ///
     /// Set a new body value for the request
     ///
@@ -80,7 +81,7 @@ public extension HttpRawRequest {
     ///
     /// - Returns: A new request object with the updated body value
     ///
-    func body(_ body: Data) -> HttpRawRequest {
+    public func body(_ body: Data) -> HttpRawRequest {
         .init(url: url, method: method, headers: headers, body: body)
     }
 }

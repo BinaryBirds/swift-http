@@ -6,13 +6,14 @@
 //
 
 import XCTest
+
 @testable import SwiftHttp
 
 final class HttpRawRequestTests: XCTestCase {
-        
+
     func testRawRequest() async throws {
         let client = UrlSessionHttpClient(session: .shared, logLevel: .trace)
-        
+
         let url = HttpUrl(
             scheme: "https",
             host: "jsonplaceholder.typicode.com",
@@ -22,9 +23,14 @@ final class HttpRawRequestTests: XCTestCase {
             query: [:],
             fragment: nil
         )
-        
-        let req = HttpRawRequest(url: url, method: .get, headers: [:], body: nil)
-        
+
+        let req = HttpRawRequest(
+            url: url,
+            method: .get,
+            headers: [:],
+            body: nil
+        )
+
         let response = try await client.dataTask(req)
         let todos = try JSONDecoder().decode([Todo].self, from: response.data)
         XCTAssertEqual(response.statusCode, .ok)

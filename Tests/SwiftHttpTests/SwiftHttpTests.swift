@@ -6,10 +6,11 @@
 //
 
 import XCTest
+
 @testable import SwiftHttp
 
 final class SwiftHttpTests: XCTestCase {
-        
+
     func testCancellation() async throws {
         let task = Task {
             let api = PostApi()
@@ -30,7 +31,7 @@ final class SwiftHttpTests: XCTestCase {
             XCTAssertEqual((error as? URLError)?.code, .cancelled)
         }
     }
-    
+
     func testError() async throws {
         let api = PostApi()
         do {
@@ -43,7 +44,7 @@ final class SwiftHttpTests: XCTestCase {
             XCTFail(error.localizedDescription)
         }
     }
-    
+
     func testQueryParams() async throws {
         let api = PostApi()
         let res = try await api.filterPosts(1)

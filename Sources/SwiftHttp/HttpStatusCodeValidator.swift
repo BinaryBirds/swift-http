@@ -9,10 +9,10 @@ import Foundation
 
 /// Validates a status code using an expected value
 public struct HttpStatusCodeValidator: HttpResponseValidator {
-    
+
     /// The expected status code
     let code: HttpStatusCode?
-    
+
     ///
     /// Initialize a new validator
     ///
@@ -41,4 +41,3 @@ public struct HttpStatusCodeValidator: HttpResponseValidator {
         }
     }
 }
-

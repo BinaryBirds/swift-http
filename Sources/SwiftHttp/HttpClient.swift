@@ -27,7 +27,7 @@ public protocol HttpClient {
     /// - Returns: A HttpResponse object
     ///
     func dataTask(_ req: HttpRequest) async throws -> HttpResponse
-    
+
     ///
     /// Retreives the contetns of the request (to a file), then returns the location (URL) of the file as a response data object
     ///
@@ -38,7 +38,7 @@ public protocol HttpClient {
     /// - Returns: A HttpResponse object
     ///
     func downloadTask(_ req: HttpRequest) async throws -> HttpResponse
-    
+
     ///
     /// Performs a HTTP request and uploads the body as binary data to the server
     ///

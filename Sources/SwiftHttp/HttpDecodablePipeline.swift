@@ -9,14 +9,14 @@ import Foundation
 
 /// A decodable pipeline workflow, to decode a value from the response
 public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
-    
+
     let url: HttpUrl
     let method: HttpMethod
     let headers: [HttpHeaderKey: String]
     let body: Data?
     let validators: [HttpResponseValidator]
     let decoder: HttpResponseDecoder<U>
-    
+
     ///
     /// Initialize the pipeline
     ///
@@ -42,7 +42,7 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         self.validators = validators
         self.decoder = decoder
     }
-    
+
     ///
     /// Executes  the request, encodes the body, validates the response and decodes the data
     ///
@@ -68,4 +68,3 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
         return try decoder.decode(response.data)
     }
 }
-

@@ -6,14 +6,15 @@
 //
 
 import Foundation
+
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+    import FoundationNetworking
 #endif
 
-public extension URLRequest {
+extension URLRequest {
 
     /// Returns the curl command representation of a URLRequest
-    var curlString: String {
+    public var curlString: String {
         guard let url = url else {
             return ""
         }
