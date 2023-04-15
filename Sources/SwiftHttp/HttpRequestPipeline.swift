@@ -14,7 +14,7 @@ import Foundation
 /// It might includes validations date encoding, decoding
 ///
 public protocol HttpRequestPipeline {
-    
+
     /// generic response type
     associatedtype Response
 

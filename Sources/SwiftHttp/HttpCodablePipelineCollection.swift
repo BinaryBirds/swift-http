@@ -16,7 +16,7 @@ public protocol HttpCodablePipelineCollection {
     /// - Returns: The generic request encoder instance
     ///
     func encoder<T: Encodable>() -> HttpRequestEncoder<T>
-    
+
     ///
     /// The generic decoder object used to decode response data
     ///
@@ -25,25 +25,25 @@ public protocol HttpCodablePipelineCollection {
     func decoder<T: Decodable>() -> HttpResponseDecoder<T>
 }
 
-public extension HttpCodablePipelineCollection {
+extension HttpCodablePipelineCollection {
 
     ///
     /// The generic encoder object used to encode body values
     ///
     /// - Returns: The default json encoder
     ///
-    func encoder<T: Encodable>() -> HttpRequestEncoder<T> { .json() }
-    
+    public func encoder<T: Encodable>() -> HttpRequestEncoder<T> { .json() }
+
     ///
     /// The generic decoder object used to decode response data
     ///
     /// - Returns: The default json decoder
     ///
-    func decoder<T: Decodable>() -> HttpResponseDecoder<T> { .json() }
+    public func decoder<T: Decodable>() -> HttpResponseDecoder<T> { .json() }
 }
 
-public extension HttpCodablePipelineCollection {
-    
+extension HttpCodablePipelineCollection {
+
     ///
     /// Executes a raw request pipeline using a data values as a body and returns the response
     ///
@@ -58,7 +58,7 @@ public extension HttpCodablePipelineCollection {
     ///
     /// - Returns: The HTTP response object
     ///
-    func rawRequest(
+    public func rawRequest(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,
@@ -75,7 +75,7 @@ public extension HttpCodablePipelineCollection {
         )
         return try await pipeline.execute(executor)
     }
-    
+
     ///
     /// Executes an encodable request pipeline using an encodable object as a body value and returns the response
     ///
@@ -90,7 +90,7 @@ public extension HttpCodablePipelineCollection {
     ///
     /// - Returns: The HTTP response object
     ///
-    func encodableRequest<T: Encodable>(
+    public func encodableRequest<T: Encodable>(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,
@@ -108,7 +108,7 @@ public extension HttpCodablePipelineCollection {
         )
         return try await pipeline.execute(executor)
     }
-    
+
     ///
     /// Executes a raw request pipeline using a data values as a body and returns the response
     ///
@@ -123,7 +123,7 @@ public extension HttpCodablePipelineCollection {
     ///
     /// - Returns: The decoded response object
     ///
-    func decodableRequest<U: Decodable>(
+    public func decodableRequest<U: Decodable>(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,
@@ -141,7 +141,7 @@ public extension HttpCodablePipelineCollection {
         )
         return try await pipeline.execute(executor)
     }
-    
+
     ///
     /// Executes a codable request pipeline using an encodable body and decodes the response
     ///
@@ -156,7 +156,7 @@ public extension HttpCodablePipelineCollection {
     ///
     /// - Returns: The decoded response object
     ///
-    func codableRequest<T: Encodable, U: Decodable>(
+    public func codableRequest<T: Encodable, U: Decodable>(
         executor: ((HttpRequest) async throws -> HttpResponse),
         url: HttpUrl,
         method: HttpMethod,

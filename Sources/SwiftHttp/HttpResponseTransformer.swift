@@ -9,13 +9,13 @@ import Foundation
 
 /// Transforms a given response into a decodable object and validates it upfront
 public protocol HttpResponseTransformer {
-    
+
     /// The decodable object type
     associatedtype T: Decodable
-    
+
     /// Validators to perform before the decoding
     var validators: [HttpResponseValidator] { get }
-    
+
     ///
     /// Decodes the response data into a custom decodable object
     ///
@@ -27,4 +27,3 @@ public protocol HttpResponseTransformer {
     ///
     func decode(_ data: Data) throws -> T
 }
-

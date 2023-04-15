@@ -9,13 +9,13 @@ import Foundation
 
 /// A raw pipeline can be used to send an recieve raw body data values
 public struct HttpRawPipeline: HttpRequestPipeline {
-    
+
     let url: HttpUrl
     let method: HttpMethod
     let headers: [HttpHeaderKey: String]
     let body: Data?
     let validators: [HttpResponseValidator]
-    
+
     ///
     /// Initialize the pipeline
     ///
@@ -38,7 +38,7 @@ public struct HttpRawPipeline: HttpRequestPipeline {
         self.body = body
         self.validators = validators
     }
-    
+
     ///
     /// Executes  the request, encodes the body, validates the response and decodes the data
     ///
@@ -63,4 +63,3 @@ public struct HttpRawPipeline: HttpRequestPipeline {
         return response
     }
 }
-

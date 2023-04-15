@@ -9,10 +9,10 @@ import Foundation
 
 /// A request transformer that is capable of transforming the request data or add extra header values
 public protocol HttpRequestTransformer {
-    
+
     /// The encodable type that is going to be transformed into data
     associatedtype T: Encodable
-    
+
     /// Additional header values for the request
     var headers: [HttpHeaderKey: String] { get }
 
@@ -27,4 +27,3 @@ public protocol HttpRequestTransformer {
     ///
     func encode(_ content: T) throws -> Data
 }
-

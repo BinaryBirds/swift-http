@@ -8,8 +8,10 @@
 import Foundation
 
 /// A fully Codable HTTP request pipeline, where the req body is encodable and the response is decodable
-public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeline {
-    
+public struct HttpCodablePipeline<T: Encodable, U: Decodable>:
+    HttpRequestPipeline
+{
+
     let url: HttpUrl
     let method: HttpMethod
     let headers: [HttpHeaderKey: String]
@@ -17,7 +19,7 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
     let validators: [HttpResponseValidator]
     let encoder: HttpRequestEncoder<T>
     let decoder: HttpResponseDecoder<U>
-    
+
     ///
     /// Init a new codable pipeline
     ///
@@ -46,7 +48,7 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
         self.encoder = encoder
         self.decoder = decoder
     }
-    
+
     ///
     /// Executes  the request, encodes the body, validates the response and decodes the data
     ///
@@ -59,16 +61,16 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
     public func execute(
         _ executor: ((HttpRequest) async throws -> HttpResponse)
     ) async throws -> U {
-        let req = HttpRawRequest(url: url,
-                                  method: method,
-                                  headers: headers.merging(encoder.headers) { $1 },
-                                  body: try encoder.encode(body))
-        
+        let req = HttpRawRequest(
+            url: url,
+            method: method,
+            headers: headers.merging(encoder.headers) { $1 },
+            body: try encoder.encode(body)
+        )
+
         let response = try await executor(req)
         let validation = HttpResponseValidation(validators + decoder.validators)
         try validation.validate(response)
         return try decoder.decode(response.data)
     }
 }
-
-

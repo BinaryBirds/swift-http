@@ -8,14 +8,17 @@
 import Foundation
 import SwiftHttp
 
-public extension HttpResponseDecoder {
-    
-    static func custom() -> HttpResponseDecoder {
-        .init(decoder: CustomDataDecoder(), validators: [
-            HttpHeaderValidator(.contentType) {
-                $0.contains("application/json")
-            },
-        ])
+extension HttpResponseDecoder {
+
+    public static func custom() -> HttpResponseDecoder {
+        .init(
+            decoder: CustomDataDecoder(),
+            validators: [
+                HttpHeaderValidator(.contentType) {
+                    $0.contains("application/json")
+                }
+            ]
+        )
     }
 }
 
@@ -24,9 +27,11 @@ struct CustomDataDecoder: HttpDataDecoder {
     struct WrongPost: Codable {
         let id: Int
     }
-    
-    func decode<T>(_ type: T.Type, from data: Data) throws -> T where T : Decodable {
+
+    func decode<T>(_ type: T.Type, from data: Data) throws -> T
+    where T: Decodable {
         let wrongPost = try JSONDecoder().decode(WrongPost.self, from: data)
-        return Post(userId: 1, id: wrongPost.id, title: "lorem", body: "ipsum") as! T
+        return Post(userId: 1, id: wrongPost.id, title: "lorem", body: "ipsum")
+            as! T
     }
 }

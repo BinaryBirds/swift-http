@@ -9,10 +9,10 @@ import Foundation
 
 /// Validates a header value using a key and a validation block
 public struct HttpHeaderValidator: HttpResponseValidator {
-    
+
     /// The header key to look for
     let key: HttpHeaderKey
-    
+
     ///
     /// The validation block
     ///
@@ -21,13 +21,13 @@ public struct HttpHeaderValidator: HttpResponseValidator {
     /// - Returns: True if the value is valid, otherwise false
     ///
     let block: (String) -> Bool
-    
+
     ///
     /// Initialize a new validator
     ///
     /// - Parameter key The header key to look up the value
     /// - Parameter blcok The validation block using the header value
-    /// 
+    ///
     public init(
         _ key: HttpHeaderKey,
         _ block: @escaping ((String) -> Bool)
@@ -52,4 +52,3 @@ public struct HttpHeaderValidator: HttpResponseValidator {
         }
     }
 }
-
