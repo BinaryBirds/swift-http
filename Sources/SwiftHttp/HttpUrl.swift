@@ -47,14 +47,16 @@ public struct HttpUrl {
     /// - Parameter fragment: The  fragment, default: `nil`
     /// - Parameter trailingSlashEnabled: Sets  ``HttpUrl/isTrailingSlashEnabled``, default: `true`
     ///
-    public init(scheme: String = "https",
-                host: String,
-                port: Int = 80,
-                path: [String] = [],
-                resource: String? = nil,
-                query: [String : String] = [:],
-                fragment: String? = nil,
-                trailingSlashEnabled: Bool = true) {
+    public init(
+        scheme: String = "https",
+        host: String,
+        port: Int = 80,
+        path: [String] = [],
+        resource: String? = nil,
+        query: [String : String] = [:],
+        fragment: String? = nil,
+        trailingSlashEnabled: Bool = true
+    ) {
         self.scheme = scheme
         self.host = host
         self.port = port

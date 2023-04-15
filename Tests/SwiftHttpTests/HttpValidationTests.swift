@@ -11,7 +11,11 @@ import XCTest
 final class HttpValidationTests: XCTestCase {
     
     func testStatusCodeValidator() async throws {
-        let response = HttpRawResponse(statusCode: .ok, headers: [:], data: .init())
+        let response = HttpRawResponse(
+            statusCode: .ok,
+            headers: [:],
+            data: .init()
+        )
         let validator1 = HttpStatusCodeValidator() // 200...299
         try validator1.validate(response)
         
@@ -20,7 +24,11 @@ final class HttpValidationTests: XCTestCase {
     }
     
     func testBadStatusCodeValidator() async throws {
-        let response = HttpRawResponse(statusCode: .notFound, headers: [:], data: .init())
+        let response = HttpRawResponse(
+            statusCode: .notFound,
+            headers: [:],
+            data: .init()
+        )
         let validator = HttpStatusCodeValidator() // 200...299
         do {
             try validator.validate(response)
@@ -32,7 +40,11 @@ final class HttpValidationTests: XCTestCase {
     }
     
     func testBadStatusCodeValidator2() async throws {
-        let response = HttpRawResponse(statusCode: .notFound, headers: [:], data: .init())
+        let response = HttpRawResponse(
+            statusCode: .notFound,
+            headers: [:],
+            data: .init()
+        )
         let validator = HttpStatusCodeValidator(.ok)
         do {
             try validator.validate(response)
@@ -44,11 +56,13 @@ final class HttpValidationTests: XCTestCase {
     }
     
     func testHeaderValidator() async throws {
-        let response = HttpRawResponse(statusCode: .ok,
-                                       headers: [
-                                        .contentType: "application/json",
-                                       ],
-                                       data: .init())
+        let response = HttpRawResponse(
+            statusCode: .ok,
+            headers: [
+                .contentType: "application/json",
+            ],
+            data: .init()
+        )
         let validator = HttpHeaderValidator(.contentType) { value in
             value == "application/json"
         }
@@ -56,11 +70,13 @@ final class HttpValidationTests: XCTestCase {
     }
     
     func testInvalidHeaderValidator() async throws {
-        let response = HttpRawResponse(statusCode: .ok,
-                                       headers: [
-                                        .contentType: "application/json",
-                                       ],
-                                       data: .init())
+        let response = HttpRawResponse(
+            statusCode: .ok,
+            headers: [
+                .contentType: "application/json",
+            ],
+            data: .init()
+        )
         let validator = HttpHeaderValidator(.contentType) { value in
             value == "application/xml"
         }
@@ -74,11 +90,13 @@ final class HttpValidationTests: XCTestCase {
     }
     
     func testMultipleValidation() async throws {
-        let response = HttpRawResponse(statusCode: .ok,
-                                       headers: [
-                                        .contentType: "application/json",
-                                       ],
-                                       data: .init())
+        let response = HttpRawResponse(
+            statusCode: .ok,
+            headers: [
+                .contentType: "application/json",
+            ],
+            data: .init()
+        )
         
         let validator1 = HttpStatusCodeValidator(.ok)
         let validator2 = HttpHeaderValidator(.contentType) { value in
@@ -88,4 +106,3 @@ final class HttpValidationTests: XCTestCase {
         try validation.validate(response)
     }
 }
-

@@ -48,4 +48,3 @@ final class HttpUrlTests: XCTestCase {
         XCTAssertEqual(query1Url.url.absoluteString, "https://jsonplaceholder.typicode.com/todos?foo=bar")
     }
 }
-

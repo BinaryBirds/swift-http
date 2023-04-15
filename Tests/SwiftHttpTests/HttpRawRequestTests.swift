@@ -11,15 +11,17 @@ import XCTest
 final class HttpRawRequestTests: XCTestCase {
         
     func testRawRequest() async throws {
-        let client = UrlSessionHttpClient(session: .shared, log: true)
+        let client = UrlSessionHttpClient(session: .shared, logLevel: .trace)
         
-        let url = HttpUrl(scheme: "https",
-                          host: "jsonplaceholder.typicode.com",
-                          port: 80,
-                          path: ["todos"],
-                          resource: nil,
-                          query: [:],
-                          fragment: nil)
+        let url = HttpUrl(
+            scheme: "https",
+            host: "jsonplaceholder.typicode.com",
+            port: 80,
+            path: ["todos"],
+            resource: nil,
+            query: [:],
+            fragment: nil
+        )
         
         let req = HttpRawRequest(url: url, method: .get, headers: [:], body: nil)
         
@@ -29,4 +31,3 @@ final class HttpRawRequestTests: XCTestCase {
         XCTAssertEqual(todos.count, 200)
     }
 }
-

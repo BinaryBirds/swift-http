@@ -21,7 +21,10 @@ public struct HttpRequestEncoder<T: Encodable>: HttpRequestTransformer {
     /// - Parameter encoder: The encoder used to encode the data
     /// - Parameter validators: The additional header fields
     ///
-    public init(encoder: HttpDataEncoder, headers: [HttpHeaderKey: String] = [:]) {
+    public init(
+        encoder: HttpDataEncoder,
+        headers: [HttpHeaderKey: String] = [:]
+    ) {
         self.encoder = encoder
         self.headers = headers
     }
@@ -48,11 +51,13 @@ public extension HttpRequestEncoder {
     /// - Parameter encoder: The JSONEncoder object to use, the default is the built in JSONEncoder
     /// - Parameter headers: The default accept and content type headers for a JSON request
     ///
-    static func json(_ encoder: JSONEncoder = .init(),
-                     headers: [HttpHeaderKey: String] = [
-                        .accept: "application/json",
-                        .contentType: "application/json",
-                     ]) -> HttpRequestEncoder {
-                         .init(encoder: encoder, headers: headers)
-                     }
+    static func json(
+        _ encoder: JSONEncoder = .init(),
+        headers: [HttpHeaderKey: String] = [
+            .accept: "application/json",
+            .contentType: "application/json",
+        ]
+    ) -> HttpRequestEncoder {
+        .init(encoder: encoder, headers: headers)
+    }
 }

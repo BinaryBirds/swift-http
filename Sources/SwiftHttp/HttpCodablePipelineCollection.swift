@@ -162,16 +162,17 @@ public extension HttpCodablePipelineCollection {
         method: HttpMethod,
         headers: [HttpHeaderKey: String] = [:],
         body: T,
-        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]) async throws -> U {
-            let pipeline: HttpCodablePipeline<T, U> = .init(
-                url: url,
-                method: method,
-                headers: headers,
-                body: body,
-                validators: validators,
-                encoder: encoder(),
-                decoder: decoder()
-            )
-            return try await pipeline.execute(executor)
-        }
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]
+    ) async throws -> U {
+        let pipeline: HttpCodablePipeline<T, U> = .init(
+            url: url,
+            method: method,
+            headers: headers,
+            body: body,
+            validators: validators,
+            encoder: encoder(),
+            decoder: decoder()
+        )
+        return try await pipeline.execute(executor)
+    }
 }

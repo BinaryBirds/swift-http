@@ -27,12 +27,14 @@ public struct HttpEncodablePipeline<T: Encodable>: HttpRequestPipeline {
     /// - Parameter validators: The response validators
     /// - Parameter encoder: The encoder used to encode the body value
     ///
-    public init(url: HttpUrl,
-                method: HttpMethod,
-                headers: [HttpHeaderKey: String] = [:],
-                body: T,
-                validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                encoder: HttpRequestEncoder<T>) {
+    public init(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String] = [:],
+        body: T,
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
+        encoder: HttpRequestEncoder<T>
+    ) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -50,11 +52,15 @@ public struct HttpEncodablePipeline<T: Encodable>: HttpRequestPipeline {
     ///
     /// - Returns: The HTTP response object
     ///
-    public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> HttpResponse {
-        let req = HttpRawRequest(url: url,
-                                  method: method,
-                                  headers: headers.merging(encoder.headers) { $1 },
-                                  body: try encoder.encode(body))
+    public func execute(
+        _ executor: ((HttpRequest) async throws -> HttpResponse)
+    ) async throws -> HttpResponse {
+        let req = HttpRawRequest(
+            url: url,
+            method: method,
+            headers: headers.merging(encoder.headers) { $1 },
+            body: try encoder.encode(body)
+        )
         
         let response = try await executor(req)
         let validation = HttpResponseValidation(validators)

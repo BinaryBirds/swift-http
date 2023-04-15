@@ -21,7 +21,10 @@ public struct HttpResponseDecoder<T: Decodable>: HttpResponseTransformer {
     /// - Parameter decoder: The decoder to use for the decoding
     /// - Parameter validators: The array of validators
     ///
-    public init(decoder: HttpDataDecoder, validators: [HttpResponseValidator] = []) {
+    public init(
+        decoder: HttpDataDecoder,
+        validators: [HttpResponseValidator] = []
+    ) {
         self.decoder = decoder
         self.validators = validators
     }
@@ -48,12 +51,14 @@ public extension HttpResponseDecoder {
     /// - Parameter decoder: The JSONDecoder object to use, the default is the built in JSONDecoder
     /// - Parameter validators: The array of validators, by default it validates the content type
     ///
-    static func json(_ decoder: JSONDecoder = .init(),
-                     validators: [HttpResponseValidator] = [
-                         HttpHeaderValidator(.contentType) {
-                             $0.contains("application/json")
-                         },
-                     ]) -> HttpResponseDecoder {
+    static func json(
+        _ decoder: JSONDecoder = .init(),
+        validators: [HttpResponseValidator] = [
+            HttpHeaderValidator(.contentType) {
+                $0.contains("application/json")
+            },
+        ]
+    ) -> HttpResponseDecoder {
         .init(decoder: decoder, validators: validators)
     }
 }

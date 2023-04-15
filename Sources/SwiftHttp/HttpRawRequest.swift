@@ -30,10 +30,12 @@ public struct HttpRawRequest: HttpRequest {
     /// - Parameter headers: The request headers
     /// - Parameter body: The request body as a data value
     ///
-    public init(url: HttpUrl,
-                method: HttpMethod = .get,
-                headers: [HttpHeaderKey: String] = [:],
-                body: Data? = nil) {
+    public init(
+        url: HttpUrl,
+        method: HttpMethod = .get,
+        headers: [HttpHeaderKey: String] = [:],
+        body: Data? = nil
+    ) {
         self.method = method
         self.url = url
         self.headers = headers

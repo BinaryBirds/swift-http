@@ -23,19 +23,32 @@ final class PostTests: XCTestCase {
     }
     
     func testCreate() async throws {
-        let object = Post(userId: 1, id: 1, title: "lorem ipsum", body: "dolor sit amet")
+        let object = Post(
+            userId: 1,
+            id: 1,
+            title: "lorem ipsum",
+            body: "dolor sit amet"
+        )
         let post = try await api.createPost(object)
         XCTAssertEqual(post.id, 101)
     }
     
     func testUpdate() async throws {
-        let object = Post.Update(userId: 1, title: "lorem ipsum", body: "dolor sit amet")
+        let object = Post.Update(
+            userId: 1,
+            title: "lorem ipsum",
+            body: "dolor sit amet"
+        )
         let post = try await api.updatePost(1, object)
         XCTAssertEqual(post.id, 1)
     }
     
     func testPatch() async throws {
-        let object = Post.Update(userId: 1, title: "lorem ipsum", body: "dolor sit amet")
+        let object = Post.Update(
+            userId: 1,
+            title: "lorem ipsum",
+            body: "dolor sit amet"
+        )
         let post = try await api.patchPost(1, object)
         XCTAssertEqual(post.id, 1)
     }
@@ -46,4 +59,3 @@ final class PostTests: XCTestCase {
     }
 
 }
-

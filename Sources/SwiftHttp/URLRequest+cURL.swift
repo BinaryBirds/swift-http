@@ -17,7 +17,7 @@ public extension URLRequest {
         guard let url = url else {
             return ""
         }
-        var baseCommand = #"curl "\#(url.absoluteString)""#
+        var baseCommand = "\n" + #"curl "\#(url.absoluteString)""#
 
         if httpMethod == "HEAD" {
             baseCommand += " --head"

@@ -14,7 +14,7 @@ struct PostApi: HttpCodablePipelineCollection {
 //        let message: String
 //    }
 
-    let client: HttpClient = UrlSessionHttpClient(log: true)
+    let client: HttpClient = UrlSessionHttpClient(logLevel: .trace)
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
     
     /// NOTE: this API call should return a 404 response

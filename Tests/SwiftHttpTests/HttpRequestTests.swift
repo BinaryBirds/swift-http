@@ -17,14 +17,17 @@ final class HttpRequestTests: XCTestCase {
         let body = try JSONEncoder().encode([
             "foo": "bar",
         ])
-        let req = HttpRawRequest(url: url,
-                                 method: .post,
-                                 headers: [
-                                    .authorization: "Bearer \(token)",
-                                 ],
-                                 body: body)
+        let req = HttpRawRequest(
+            url: url,
+            method: .post,
+            headers: [
+                .authorization: "Bearer \(token)",
+            ],
+            body: body
+        )
         
         let expectation = """
+            
             curl "https://localhost/login/" \\
             \t-X POST \\
             \t-H 'Authorization: Bearer valid-token' \\
@@ -34,4 +37,3 @@ final class HttpRequestTests: XCTestCase {
         XCTAssertEqual(req.urlRequest.curlString, expectation)
     }
 }
-

@@ -28,7 +28,10 @@ public struct HttpHeaderValidator: HttpResponseValidator {
     /// - Parameter key The header key to look up the value
     /// - Parameter blcok The validation block using the header value
     /// 
-    public init(_ key: HttpHeaderKey, _ block: @escaping ((String) -> Bool)) {
+    public init(
+        _ key: HttpHeaderKey,
+        _ block: @escaping ((String) -> Bool)
+    ) {
         self.key = key
         self.block = block
     }

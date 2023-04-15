@@ -29,7 +29,11 @@ public struct HttpRawResponse: HttpResponse {
     /// - Parameter headers: The header fields
     /// - Parameter data: The body data
     ///
-    public init(statusCode: HttpStatusCode, headers: [HttpHeaderKey: String], data: Data) {
+    public init(
+        statusCode: HttpStatusCode,
+        headers: [HttpHeaderKey: String],
+        data: Data
+    ) {
         self.statusCode = statusCode
         self.headers = headers
         self.data = data
@@ -61,4 +65,5 @@ public struct HttpRawResponse: HttpResponse {
 }
 
 extension HttpRawResponse: Codable, Equatable {
+    
 }

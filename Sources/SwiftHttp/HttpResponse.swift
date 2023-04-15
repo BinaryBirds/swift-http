@@ -27,4 +27,17 @@ public extension HttpResponse {
     var utf8String: String? {
         String(data: data, encoding: .utf8)
     }
+    
+    var traceLogValue: String {
+        let prettyHeaders = headers
+            .map { "\($0.key.rawValue): \($0.value)" }
+            .sorted()
+            .joined(separator: "\n")
+        
+        return """
+        
+        \(prettyHeaders)
+        \(statusCode.rawValue)
+        """
+    }
 }

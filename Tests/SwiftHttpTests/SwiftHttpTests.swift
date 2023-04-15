@@ -17,7 +17,8 @@ final class SwiftHttpTests: XCTestCase {
             XCTFail("Request should be cancelled")
         }
 
-        DispatchQueue.global().asyncAfter(deadline: .now() + .milliseconds(10)) {
+        let deadline = DispatchTime.now() + .milliseconds(10)
+        DispatchQueue.global().asyncAfter(deadline: deadline) {
             task.cancel()
         }
 
@@ -49,4 +50,3 @@ final class SwiftHttpTests: XCTestCase {
         XCTAssertEqual(res.count, 10)
     }
 }
-

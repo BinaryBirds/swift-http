@@ -29,5 +29,7 @@ public protocol HttpRequestPipeline {
     ///
     /// - Returns: The generic Response object
     ///
-    func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> Response
+    func execute(
+        _ executor: ((HttpRequest) async throws -> HttpResponse)
+    ) async throws -> Response
 }

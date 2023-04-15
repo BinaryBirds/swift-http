@@ -27,12 +27,14 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     /// - Parameter validators: The response validators
     /// - Parameter decoder: The decoder used to decode the response data
     ///
-    public init(url: HttpUrl,
-                method: HttpMethod,
-                headers: [HttpHeaderKey: String] = [:],
-                body: Data? = nil,
-                validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                decoder: HttpResponseDecoder<U>) {
+    public init(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String] = [:],
+        body: Data? = nil,
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
+        decoder: HttpResponseDecoder<U>
+    ) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -50,11 +52,15 @@ public struct HttpDecodablePipeline<U: Decodable>: HttpRequestPipeline {
     ///
     /// - Returns: The decoded response object
     ///
-    public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> U {
-        let req = HttpRawRequest(url: url,
-                                  method: method,
-                                  headers: headers,
-                                  body: body)
+    public func execute(
+        _ executor: ((HttpRequest) async throws -> HttpResponse)
+    ) async throws -> U {
+        let req = HttpRawRequest(
+            url: url,
+            method: method,
+            headers: headers,
+            body: body
+        )
 
         let response = try await executor(req)
         let validation = HttpResponseValidation(validators + decoder.validators)

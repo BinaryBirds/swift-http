@@ -40,14 +40,16 @@ struct Todo: Codable {
 
 struct TodoApi: HttpCodablePipelineCollection {
 
-    let client: HttpClient = UrlSessionHttpClient(log: true)
+    let client: HttpClient = UrlSessionHttpClient(logLevel: .info)
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
 
     
     func list() async throws -> [Todo] {
-        try await decodableRequest(executor: client.dataTask,
-                                   url: apiBaseUrl.path("todos"),
-                                   method: .get)
+        try await decodableRequest(
+            executor: client.dataTask,
+            url: apiBaseUrl.path("todos"),
+            method: .get
+        )
     }    
 }
 
@@ -69,18 +71,25 @@ You can create decodable, encodable, codable or raw request when using a codable
 You can create raw HTTP requests using the HttpUrl and the HttpRawRequest type.   
 
 ```swift
-let url = HttpUrl(scheme: "https",
-                  host: "jsonplaceholder.typicode.com",
-                  port: 80,
-                  path: ["todos"],
-                  resource: nil,
-                  query: [:],
-                  fragment: nil)
+let url = HttpUrl(
+    scheme: "https",
+    host: "jsonplaceholder.typicode.com",
+    port: 80,
+    path: ["todos"],
+    resource: nil,
+    query: [:],
+    fragment: nil
+)
 
-let req = HttpRawRequest(url: url, method: .get, headers: [:], body: nil)
+let req = HttpRawRequest(
+    url: url, 
+    method: .get, 
+    headers: [:], 
+    body: nil
+)
 
 /// execute the request using the client
-let client = UrlSessionHttpClient(session: .shared, log: true)
+let client = UrlSessionHttpClient(session: .shared, logLevel: .info)
 let response = try await client.dataTask(req)
 
 /// use the response data
@@ -129,13 +138,15 @@ let token: String = "valid-token"
 let body = try JSONEncoder().encode([
     "foo": "bar",
 ])
-let req = HttpRawRequest(url: url,
-                         method: .post,
-                         headers: [
-                            .key(.authorization): "Bearer \(token)",
-                            .custom("my-header"): "my-header-value",
-                         ],
-                         body: body)
+let req = HttpRawRequest(
+    url: url,
+    method: .post,
+    headers: [
+        .key(.authorization): "Bearer \(token)",
+        .custom("my-header"): "my-header-value",
+    ],
+    body: body
+)
 
 /*
 curl "https://localhost/login/" \
@@ -157,11 +168,13 @@ You can validate a response by using a HttpResponseValidator object.
 
 ```swift
 // mock response
-let response = HttpRawResponse(statusCode: .ok,
-                               headers: [
-                                .key(.contentType): "application/json",
-                               ],
-                               data: .init())
+let response = HttpRawResponse(
+    statusCode: .ok,
+    headers: [
+        .key(.contentType): "application/json",
+    ],
+    data: .init()
+)
 
 // check if the status code is between 200 and 299               
 let validator1 = HttpStatusCodeValidator() // -> (.ok), (.notFound), etc.
@@ -174,7 +187,6 @@ let validator2 = HttpHeaderValidator(.key(.contentType)) { value in
 }
 
 try validator2.validate(response)
-
 
 // validate using multiple validators
 let validation = HttpResponseValidation([validator1, validator2])
@@ -193,5 +205,3 @@ You can create your own HttpRequestTransformer object to add extra headers to yo
 You can create your own HttpResponseTransformer object to validate the response and decode a custom value from the response data.
 
 The codable (encodable, decodable, codable) pipelines are a good example of this approach.
-
-

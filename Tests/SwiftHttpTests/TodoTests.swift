@@ -17,4 +17,3 @@ final class TodoTests: XCTestCase {
         XCTAssertEqual(todos.count, 200)
     }
 }
-

@@ -29,13 +29,15 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
     /// - Parameter encoder: The request data encoder object
     /// - Parameter decoder: The response data decoder object
     ///
-    public init(url: HttpUrl,
-                method: HttpMethod,
-                headers: [HttpHeaderKey: String] = [:],
-                body: T,
-                validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-                encoder: HttpRequestEncoder<T>,
-                decoder: HttpResponseDecoder<U>) {
+    public init(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String] = [:],
+        body: T,
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
+        encoder: HttpRequestEncoder<T>,
+        decoder: HttpResponseDecoder<U>
+    ) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -54,7 +56,9 @@ public struct HttpCodablePipeline<T: Encodable, U: Decodable>: HttpRequestPipeli
     ///
     /// - Returns: The decoded response object
     ///
-    public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> U {
+    public func execute(
+        _ executor: ((HttpRequest) async throws -> HttpResponse)
+    ) async throws -> U {
         let req = HttpRawRequest(url: url,
                                   method: method,
                                   headers: headers.merging(encoder.headers) { $1 },

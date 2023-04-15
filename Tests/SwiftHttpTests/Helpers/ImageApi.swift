@@ -10,7 +10,7 @@ import SwiftHttp
 
 struct ImageApi {
 
-    let client: HttpClient = UrlSessionHttpClient(log: true)
+    let client: HttpClient = UrlSessionHttpClient(logLevel: .trace)
     let apiBaseUrl = HttpUrl(host: "via.placeholder.com")
 
     func download() async throws -> Data {

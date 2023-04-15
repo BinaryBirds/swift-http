@@ -25,11 +25,13 @@ public struct HttpRawPipeline: HttpRequestPipeline {
     /// - Parameter body: The request body as a data value
     /// - Parameter validators: The response validators
     ///
-    public init(url: HttpUrl,
-                method: HttpMethod,
-                headers: [HttpHeaderKey: String] = [:],
-                body: Data? = nil,
-                validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]) {
+    public init(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String] = [:],
+        body: Data? = nil,
+        validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]
+    ) {
         self.url = url
         self.method = method
         self.headers = headers
@@ -46,8 +48,15 @@ public struct HttpRawPipeline: HttpRequestPipeline {
     ///
     /// - Returns: The HTTP response object
     ///
-    public func execute(_ executor: ((HttpRequest) async throws -> HttpResponse)) async throws -> HttpResponse {
-        let req = HttpRawRequest(url: url, method: method, headers: headers, body: body)
+    public func execute(
+        _ executor: ((HttpRequest) async throws -> HttpResponse)
+    ) async throws -> HttpResponse {
+        let req = HttpRawRequest(
+            url: url,
+            method: method,
+            headers: headers,
+            body: body
+        )
         let response = try await executor(req)
         let validation = HttpResponseValidation(validators)
         try validation.validate(response)
