@@ -1,22 +1,46 @@
 /// A collection of built-in request pipelines, raw, encodable, decodable, codable
 public protocol HttpPipelineCollection {
-
     associatedtype DataType
-    ///
-    /// The generic encoder object used to encode body values
-    ///
-    /// - Returns: The generic request encoder instance
-    ///
-//    func encoder<T: Encodable, DataEncoder: HttpDataEncoder>() -> HttpRequestEncoder<T, DataEncoder>
-//        where DataEncoder.DataType == DataType
-
-    ///
-    /// The generic decoder object used to decode response data
-    ///
-    /// - Returns: The generic response decoder
-    ///
-//    func decoder<T: Decodable, DataDecoder: HttpDataDecoder>() -> HttpResponseDecoder<T, DataDecoder>
-//        where DataDecoder.DataType == DataType
+    
+    func rawRequest(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String],
+        body: DataType?,
+        validators: [HttpResponseValidator],
+        executor: HttpExecutor<DataType>
+    ) async throws -> HttpRawResponse<DataType>
+    
+    func encodableRequest<T: Encodable, DataEncoder: HttpDataEncoder>(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String],
+        body: T,
+        validators: [HttpResponseValidator],
+        encoder: HttpRequestEncoder<T, DataEncoder>,
+        executor: HttpExecutor<DataType>
+    ) async throws -> HttpRawResponse<DataType> where DataType == DataEncoder.DataType
+    
+    func decodableRequest<U: Decodable, DataDecoder: HttpDataDecoder>(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String],
+        body: DataType?,
+        validators: [HttpResponseValidator],
+        decoder: HttpResponseDecoder<U, DataDecoder>,
+        executor: HttpExecutor<DataType>
+    ) async throws -> U where DataType == DataDecoder.DataType
+    
+    func codableRequest<T: Encodable, U: Decodable, DataEncoder: HttpDataEncoder, DataDecoder: HttpDataDecoder>(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String],
+        body: T,
+        validators: [HttpResponseValidator],
+        encoder: HttpRequestEncoder<T, DataEncoder>,
+        decoder: HttpResponseDecoder<U, DataDecoder>,
+        executor: HttpExecutor<DataType>
+    ) async throws -> U where DataType == DataEncoder.DataType, DataType == DataDecoder.DataType
 }
 
 extension HttpPipelineCollection {
@@ -75,7 +99,7 @@ extension HttpPipelineCollection {
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
         encoder: HttpRequestEncoder<T, DataEncoder>,
         executor: HttpExecutor<DataType>
-    ) async throws -> any HttpResponse where DataType == DataEncoder.DataType {
+    ) async throws -> HttpRawResponse<DataType> where DataType == DataEncoder.DataType {
         let pipeline: HttpEncodablePipeline<DataType, T, DataEncoder> = .init(
             url: url,
             method: method,

@@ -10,7 +10,7 @@ extension HttpPipelineCollection where DataType == Data {
     ///
 //    public func encoder<T: Encodable>() -> any HttpRequestEncoder { .json() }
     
-//    public func encoder<T: Encodable, DataEncoder: HttpDataEncoder>() -> HttpRequestEncoder<T, DataEncoder> { .json() }
+//    public func encoder<T: Encodable, DataEncoder: HttpDataEncoder>() -> HttpRequestEncoder<T, DataEncoder> where DataEncoder.DataType == DataType { .json() }
 
     ///
     /// The generic decoder object used to decode response data
