@@ -1,5 +1,7 @@
 # SwiftHttp
 
+protocol HttpData {} ??? 
+
 An awesome Swift HTTP library to rapidly create communication layers with API endpoints. 
 
 ## Install
