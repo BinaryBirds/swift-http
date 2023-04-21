@@ -7,14 +7,16 @@ public protocol HttpPipelineCollection {
     ///
     /// - Returns: The generic request encoder instance
     ///
-    func encoder<T: Encodable, DataEncoder: HttpDataEncoder>() -> HttpRequestEncoder<T, DataEncoder>
+//    func encoder<T: Encodable, DataEncoder: HttpDataEncoder>() -> HttpRequestEncoder<T, DataEncoder>
+//        where DataEncoder.DataType == DataType
 
     ///
     /// The generic decoder object used to decode response data
     ///
     /// - Returns: The generic response decoder
     ///
-    func decoder<T: Decodable, DataDecoder: HttpDataDecoder>() -> HttpResponseDecoder<T, DataDecoder>
+//    func decoder<T: Decodable, DataDecoder: HttpDataDecoder>() -> HttpResponseDecoder<T, DataDecoder>
+//        where DataDecoder.DataType == DataType
 }
 
 extension HttpPipelineCollection {
@@ -71,7 +73,7 @@ extension HttpPipelineCollection {
         headers: [HttpHeaderKey: String] = [:],
         body: T,
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-        encoder: HttpRequestEncoder<T, DataEncoder>? = nil,
+        encoder: HttpRequestEncoder<T, DataEncoder>,
         executor: HttpExecutor<DataType>
     ) async throws -> any HttpResponse where DataType == DataEncoder.DataType {
         let pipeline: HttpEncodablePipeline<DataType, T, DataEncoder> = .init(
@@ -80,7 +82,7 @@ extension HttpPipelineCollection {
             headers: headers,
             body: body,
             validators: validators,
-            encoder: encoder ?? self.encoder()
+            encoder: encoder
         )
         return try await pipeline.execute(executor)
     }
@@ -105,7 +107,7 @@ extension HttpPipelineCollection {
         headers: [HttpHeaderKey: String] = [:],
         body: DataType? = nil,
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-        decoder: HttpResponseDecoder<U, DataDecoder>? = nil,
+        decoder: HttpResponseDecoder<U, DataDecoder>,
         executor: HttpExecutor<DataType>
     ) async throws -> U where DataType == DataDecoder.DataType {
         let pipeline: HttpDecodablePipeline<DataType, U, DataDecoder> = .init(
@@ -114,7 +116,7 @@ extension HttpPipelineCollection {
             headers: headers,
             body: body,
             validators: validators,
-            decoder: decoder ?? self.decoder()
+            decoder: decoder
         )
         return try await pipeline.execute(executor)
     }
@@ -133,24 +135,24 @@ extension HttpPipelineCollection {
     ///
     /// - Returns: The decoded response object
     ///
-    public func codableRequest<T: Encodable, U: Decodable, DataCoder: HttpDataCoder>(
+    public func codableRequest<T: Encodable, U: Decodable, DataEncoder: HttpDataEncoder, DataDecoder: HttpDataDecoder>(
         url: HttpUrl,
         method: HttpMethod,
         headers: [HttpHeaderKey: String] = [:],
         body: T,
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-        encoder: HttpRequestEncoder<T, DataCoder>? = nil,
-        decoder: HttpResponseDecoder<U, DataCoder>? = nil,
+        encoder: HttpRequestEncoder<T, DataEncoder>,
+        decoder: HttpResponseDecoder<U, DataDecoder>,
         executor: HttpExecutor<DataType>
-    ) async throws -> U where DataType == DataCoder.DataType {
-        let pipeline: HttpCodablePipeline<DataType, T, U, DataCoder, DataCoder> = .init(
+    ) async throws -> U where DataType == DataEncoder.DataType, DataType == DataDecoder.DataType {
+        let pipeline: HttpCodablePipeline<DataType, T, U, DataEncoder, DataDecoder> = .init(
             url: url,
             method: method,
             headers: headers,
             body: body,
             validators: validators,
-            encoder: encoder ?? self.encoder(),
-            decoder: decoder ?? self.decoder()
+            encoder: encoder,
+            decoder: decoder
         )
         return try await pipeline.execute(executor)
     }
