@@ -48,7 +48,7 @@ public struct HttpDecodablePipeline<
     /// - Returns: The decoded response object
     ///
     public func execute(
-        _ executor: ((HttpRawRequest<DataType>) async throws -> HttpRawResponse<DataType>)
+        _ executor: HttpExecutor<DataType>
     ) async throws -> U {
         let req = HttpRawRequest<DataType>(
             url: url,

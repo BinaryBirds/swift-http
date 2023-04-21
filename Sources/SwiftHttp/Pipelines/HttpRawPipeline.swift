@@ -1,10 +1,10 @@
 /// A raw pipeline can be used to send an recieve raw body data values
-public struct HttpRawPipeline<D>: HttpPipeline {
+public struct HttpRawPipeline<DataType>: HttpPipeline {
 
     let url: HttpUrl
     let method: HttpMethod
     let headers: [HttpHeaderKey: String]
-    let body: D?
+    let body: DataType?
     let validators: [HttpResponseValidator]
 
     ///
@@ -20,7 +20,7 @@ public struct HttpRawPipeline<D>: HttpPipeline {
         url: HttpUrl,
         method: HttpMethod,
         headers: [HttpHeaderKey: String] = [:],
-        body: D? = nil,
+        body: DataType? = nil,
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()]
     ) {
         self.url = url
@@ -41,9 +41,9 @@ public struct HttpRawPipeline<D>: HttpPipeline {
     /// - Returns: The HTTP response object
     ///
     public func execute(
-        _ executor: ((HttpRawRequest<D>) async throws -> HttpRawResponse<D>)
-    ) async throws -> HttpRawResponse<D> {
-        let req = HttpRawRequest<D>(
+        _ executor: HttpExecutor<DataType>
+    ) async throws -> HttpRawResponse<DataType> {
+        let req = HttpRawRequest<DataType>(
             url: url,
             method: method,
             headers: headers,
