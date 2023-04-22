@@ -3,20 +3,23 @@ import SwiftHttp
 
 extension HttpPipelineCollection where DataType == Data {
 
-    ///
-    /// The generic encoder object used to encode body values
-    ///
-    /// - Returns: The default json encoder
-    ///
-//    public func encoder<T: Encodable>() -> any HttpRequestEncoder { .json() }
+    func decodableJsonRequest<U: Decodable>(
+        url: HttpUrl,
+        method: HttpMethod,
+        headers: [HttpHeaderKey: String],
+        body: DataType?,
+        validators: [HttpResponseValidator],
+        decoder: JSONDecoder = .init(),
+        executor: HttpExecutor<DataType>
+    ) async throws -> U {
     
-//    public func encoder<T: Encodable, DataEncoder: HttpDataEncoder>() -> HttpRequestEncoder<T, DataEncoder> where DataEncoder.DataType == DataType { .json() }
-
-    ///
-    /// The generic decoder object used to decode response data
-    ///
-    /// - Returns: The default json decoder
-    
-//    public func decoder<T: Decodable>() -> any HttpResponseDecoder { .json() }
-    
+        try await decodableRequest(
+            url: url,
+            method: method,
+            headers: headers,
+            body: body,
+            decoder: .json(decoder),
+            executor: executor
+        )
+    }
 }
