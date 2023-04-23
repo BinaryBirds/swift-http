@@ -1,7 +1,7 @@
 /// A collection of built-in request pipelines, raw, encodable, decodable, codable
 public protocol HttpPipelineCollection {
     associatedtype DataType
-    
+
     func rawRequest(
         url: HttpUrl,
         method: HttpMethod,

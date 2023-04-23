@@ -4,14 +4,15 @@ import PackageDescription
 let package = Package(
     name: "swift-http",
     platforms: [
-        .macOS(.v10_15),
-        .iOS(.v13),
-        .tvOS(.v13),
-        .watchOS(.v6),
+        .macOS(.v12),
+        .iOS(.v15),
+        .tvOS(.v15),
+        .watchOS(.v8),
     ],
     products: [
         .library(name: "SwiftHttp", targets: ["SwiftHttp"]),
         .library(name: "SwiftHttpFoundation", targets: ["SwiftHttpFoundation"]),
+        .library(name: "SwiftHttpAsyncClient", targets: ["SwiftHttpAsyncClient"]),
     ],
     dependencies: [
         .package(
@@ -29,6 +30,9 @@ let package = Package(
             .product(name: "AsyncHTTPClient", package: "async-http-client"),
         ]),
         .target(name: "SwiftHttpFoundation", dependencies: [
+            .target(name: "SwiftHttp")
+        ]),
+        .target(name: "SwiftHttpAsyncClient", dependencies: [
             .target(name: "SwiftHttp")
         ]),
         .testTarget(
