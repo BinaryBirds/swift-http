@@ -1,12 +1,4 @@
-//
-//  HttpUrlTests.swift
-//  SwiftHttpTests
-//
-//  Created by Tibor Bodecs on 2022. 03. 13..
-//
-
 import XCTest
-
 @testable import SwiftHttp
 
 final class HttpUrlTests: XCTestCase {

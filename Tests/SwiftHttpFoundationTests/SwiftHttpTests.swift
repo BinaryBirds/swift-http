@@ -1,10 +1,3 @@
-//
-//  SwiftHttpTests.swift
-//  SwiftHttpTests
-//
-//  Created by Tibor Bodecs on 2022. 03. 10..
-//
-
 import XCTest
 
 @testable import SwiftHttp

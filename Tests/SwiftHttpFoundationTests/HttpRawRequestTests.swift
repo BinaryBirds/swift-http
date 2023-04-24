@@ -1,10 +1,3 @@
-//
-//  HttpRawRequestTests.swift
-//  SwiftHttpTests
-//
-//  Created by Tibor Bodecs on 2022. 03. 13..
-//
-
 import XCTest
 import SwiftHttp
 @testable import SwiftHttpFoundation

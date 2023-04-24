@@ -1,7 +1,7 @@
 import Foundation
 import SwiftHttp
 
-extension HttpRequest where D == Data {
+extension HttpRawRequest where D == Data {
 
     /// Converts a HttpRequest to a URLRequest
     public var urlRequest: URLRequest {

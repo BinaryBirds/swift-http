@@ -1,13 +1,6 @@
-//
-//  File.swift
-//
-//
-//  Created by Tibor Bodecs on 2022. 03. 11..
-//
-
 import Foundation
 import SwiftHttp
-@testable import SwiftHttpFoundation
+import SwiftHttpFoundation
 
 struct TodoApi: HttpPipelineCollection  {
 

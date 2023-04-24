@@ -1,10 +1,3 @@
-//
-//  PostsApi.swift
-//  SwiftHttpTests
-//
-//  Created by Tibor Bodecs on 2022. 03. 10..
-//
-
 import Foundation
 import SwiftHttp
 import SwiftHttpFoundation

@@ -1,4 +1,3 @@
-
 public struct HttpBody<T, S: AsyncSequence & Sendable> where S.Element == T {
     
     enum Value {
