@@ -5,7 +5,7 @@ import SwiftHttp
 final class HttpRawRequestTests: XCTestCase {
 
     func testRawRequest() async throws {
-        let client = UrlSessionHttpClient(session: .shared, logLevel: .trace)
+        let client = SwiftHttpFoundationClient(session: .shared, logLevel: .trace)
 
         let url = HttpUrl(
             scheme: "https",

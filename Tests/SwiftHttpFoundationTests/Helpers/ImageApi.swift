@@ -4,7 +4,7 @@ import SwiftHttpFoundation
 
 struct ImageApi {
 
-    let client = UrlSessionHttpClient(logLevel: .trace)
+    let client = SwiftHttpFoundationClient(logLevel: .trace)
     let apiBaseUrl = HttpUrl(host: "placekitten.com")
 
     func download() async throws -> Data {

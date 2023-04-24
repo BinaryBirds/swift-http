@@ -6,7 +6,7 @@ struct PostApi: HttpPipelineCollection {
 
     typealias DataType = Data
     
-    let client = UrlSessionHttpClient(logLevel: .trace)
+    let client = SwiftHttpFoundationClient(logLevel: .trace)
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
 
     /// NOTE: this API call should return a 404 response

@@ -1,0 +1,132 @@
+import NIOHTTP1
+import SwiftHttp
+
+extension HTTPResponseStatus {
+    
+    var httpStatus: HttpStatusCode {
+        switch self {
+        case .custom(let code, _):
+            return .init(rawValue: Int(code))!
+        case .continue:
+            return .continue
+        case .switchingProtocols:
+            return .switchingProtocols
+        case .processing:
+            return .processing
+        case .ok:
+            return .ok
+        case .created:
+            return .created
+        case .accepted:
+            return .accepted
+        case .nonAuthoritativeInformation:
+            return .nonAuthoritativeInformation
+        case .noContent:
+            return .noContent
+        case .resetContent:
+            return .resetContent
+        case .partialContent:
+            return .partialContent
+        case .multiStatus:
+            return .multiStatus
+        case .alreadyReported:
+            return .alreadyReported
+        case .imUsed:
+            return .imUsed
+        case .multipleChoices:
+            return .multipleChoices
+        case .movedPermanently:
+            return .movedPermanently
+        case .found:
+            return .found
+        case .seeOther:
+            return .seeOther
+        case .notModified:
+            return .notModified
+        case .useProxy:
+            return .useProxy
+        case .temporaryRedirect:
+            return .temporaryRedirect
+        case .permanentRedirect:
+            return .permanentRedirect
+        case .badRequest:
+            return .badRequest
+        case .unauthorized:
+            return .unauthorized
+        case .paymentRequired:
+            return .paymentRequired
+        case .forbidden:
+            return .forbidden
+        case .notFound:
+            return .notFound
+        case .methodNotAllowed:
+            return .methodNotAllowed
+        case .notAcceptable:
+            return .notAcceptable
+        case .proxyAuthenticationRequired:
+            return .proxyAuthenticationRequired
+        case .requestTimeout:
+            return .requestTimeout
+        case .conflict:
+            return .conflict
+        case .gone:
+            return .gone
+        case .lengthRequired:
+            return .lengthRequired
+        case .preconditionFailed:
+            return .preconditionFailed
+        case .payloadTooLarge:
+            return .init(rawValue: Int(code))!
+        case .uriTooLong:
+            return .uriTooLong
+        case .unsupportedMediaType:
+            return .unsupportedMediaType
+        case .rangeNotSatisfiable:
+            return .rangeNotSatisfiable
+        case .expectationFailed:
+            return .expectationFailed
+        case .imATeapot:
+            return .init(rawValue: Int(code))!
+        case .misdirectedRequest:
+            return .misdirectedRequest
+        case .unprocessableEntity:
+            return .unprocessableContent
+        case .locked:
+            return .locked
+        case .failedDependency:
+            return .failedDependency
+        case .upgradeRequired:
+            return .upgradeRequired
+        case .preconditionRequired:
+            return .preconditionRequired
+        case .tooManyRequests:
+            return .tooManyRequests
+        case .requestHeaderFieldsTooLarge:
+            return .requestHeaderFieldsTooLarge
+        case .unavailableForLegalReasons:
+            return .unavailableForLegalReasons
+        case .internalServerError:
+            return .internalServerError
+        case .notImplemented:
+            return .notImplemented
+        case .badGateway:
+            return .badGateway
+        case .serviceUnavailable:
+            return .serviceUnavailable
+        case .gatewayTimeout:
+            return .gatewayTimeout
+        case .httpVersionNotSupported:
+            return .httpVersionNotSupported
+        case .variantAlsoNegotiates:
+            return .variantAlsoNegotiates
+        case .insufficientStorage:
+            return .insufficientStorage
+        case .loopDetected:
+            return .loopDetected
+        case .notExtended:
+            return .notExtended
+        case .networkAuthenticationRequired:
+            return .networkAuthenticationRequired
+        }
+    }
+}

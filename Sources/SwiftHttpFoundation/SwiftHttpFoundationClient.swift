@@ -14,11 +14,10 @@ import SwiftHttp
 #endif
 
 /// Default URLSession based implementation of the HttpClient protocol
-public struct UrlSessionHttpClient: HttpClient {
+public struct SwiftHttpFoundationClient: HttpClient {
     public typealias DataType = Data
     
-
-    private let loggerLabel = "com.binarybirds.swift-http"
+    private let loggerLabel = "com.binarybirds.swift-http-foundation"
 
     let session: URLSession
     let logger: Logger

@@ -1,8 +1,9 @@
-import AsyncHTTPClient
-import NIOCore
 import Foundation
+import NIOCore
+import AsyncHTTPClient
 
 struct Test {
+    
     
     func session() async throws {
         let (bytes, response) = try await URLSession.shared.bytes(for: .init(url: .init(fileURLWithPath: "")))
