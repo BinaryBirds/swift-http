@@ -4,7 +4,7 @@
 /// A pipeline is a descriptor of a request -> response workflow.
 /// It might includes validations date encoding, decoding
 ///
-public protocol HttpPipeline {
+public protocol HttpPipelineInterface {
 
     /// data type
     associatedtype DataType
@@ -24,6 +24,6 @@ public protocol HttpPipeline {
     /// - Returns: The generic Response object
     ///
     func execute(
-        _ executor: ((HttpRawRequest<DataType>) async throws -> HttpRawResponse<DataType>)
+        _ executor: HttpExecutorBlock<DataType>
     ) async throws -> ResponseType
 }

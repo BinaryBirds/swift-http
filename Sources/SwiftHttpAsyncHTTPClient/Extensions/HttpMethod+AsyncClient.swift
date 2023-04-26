@@ -3,7 +3,7 @@ import NIOHTTP1
 
 extension HttpMethod {
 
-    var asyncHttpMethod: HTTPMethod {
+    var httpMethod: HTTPMethod {
         switch self {
         case .acl:
             return .ACL

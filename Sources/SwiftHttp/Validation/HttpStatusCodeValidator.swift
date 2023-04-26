@@ -23,7 +23,7 @@ public struct HttpStatusCodeValidator: HttpResponseValidator {
     ///
     /// - Throws A HttpError object if the validation fails
     ///
-    public func validate(_ response: any HttpResponse) throws {
+    public func validate(_ response: any HttpResponseInterface) throws {
         if let code = code, response.statusCode != code {
             throw HttpError.invalidStatusCode(response)
         }

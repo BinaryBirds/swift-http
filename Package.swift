@@ -12,7 +12,7 @@ let package = Package(
     products: [
         .library(name: "SwiftHttp", targets: ["SwiftHttp"]),
         .library(name: "SwiftHttpFoundation", targets: ["SwiftHttpFoundation"]),
-        .library(name: "SwiftHttpAsyncClient", targets: ["SwiftHttpAsyncClient"]),
+        .library(name: "SwiftHttpAsyncHTTPClient", targets: ["SwiftHttpAsyncHTTPClient"]),
     ],
     dependencies: [
         .package(
@@ -32,16 +32,27 @@ let package = Package(
         .target(name: "SwiftHttpFoundation", dependencies: [
             .target(name: "SwiftHttp")
         ]),
-        .target(name: "SwiftHttpAsyncClient", dependencies: [
+        .target(name: "SwiftHttpAsyncHTTPClient", dependencies: [
             .target(name: "SwiftHttp")
         ]),
+
         .testTarget(
             name: "SwiftHttpTests",
-            dependencies: ["SwiftHttp"]
+            dependencies: [
+                .target(name: "SwiftHttp"),
+            ]
         ),
         .testTarget(
             name: "SwiftHttpFoundationTests",
-            dependencies: ["SwiftHttpFoundation"]
+            dependencies: [
+                .target(name: "SwiftHttpFoundation"),
+            ]
+        ),
+        .testTarget(
+            name: "SwiftHttpAsyncHTTPClientTests",
+            dependencies: [
+                .target(name: "SwiftHttpAsyncHTTPClient"),
+            ]
         ),
     ]
 )

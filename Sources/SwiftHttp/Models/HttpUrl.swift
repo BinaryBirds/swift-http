@@ -1,81 +1,133 @@
+private extension String {
+    
+    func trimmingSlashes() -> String {
+        var res = self
+        if res.hasPrefix("/") {
+            res = String(res.dropFirst())
+        }
+        if res.hasSuffix("/") {
+            res = String(res.dropLast())
+        }
+        return res
+    }
+    
+    func hasExtension() -> Bool {
+        let res = split(separator: "/")
+        return res.last?.contains(".") ?? false
+    }
+}
+
 /// A wrapper to store and manipulate URLs in a safer way
 public struct HttpUrl: Equatable, Hashable, Codable, CustomStringConvertible {
 
     /// Scheme of the url, e.g. https
     public var scheme: String
 
+    /// user
+    public var user: String?
+
+    /// password
+    public var pass: String?
+    
     /// Hostname of the url, e.g. www.localhost.com
     public var host: String
 
     /// Port of the url, e.g. 80
     public var port: Int
 
-    /// Path components of the url, e.g. `/api/list = ["api", "list"]`
-    public var path: [String]
-
-    /// Resource part of the url after the path components, e.g. `sitemap.xml`
-    public var resource: String?
+    /// Path of the url
+    public var path: String?
 
     /// Query parameters, e.g. `?foo=bar`
-    public var query: [String: String]
+    public var query: [String: String?]
 
     /// Fragment of the url, e.g. `#foo`
 
     public var fragment: String?
 
-    /// Appends trailing slash at the end of the path, e.g. `localhost.com/any/path/`
-    public let isTrailingSlashEnabled: Bool
 
     ///
     /// Initialize a HttpUrl object
     ///
     /// - Parameter scheme: The  scheme, default: `https`
+    /// - Parameter user: The  user
+    /// - Parameter pass: The  password
     /// - Parameter host: The  host
     /// - Parameter port: The  port, default: `80`
     /// - Parameter path: The  path, default: `[]`
-    /// - Parameter resource: The  resource, default: `nil`
     /// - Parameter query: The  query, default: `[:]`
     /// - Parameter fragment: The  fragment, default: `nil`
-    /// - Parameter trailingSlashEnabled: Sets  ``HttpUrl/isTrailingSlashEnabled``, default: `true`
     ///
     public init(
         scheme: String = "https",
+        user: String? = nil,
+        pass: String? = nil,
         host: String,
         port: Int = 80,
-        path: [String] = [],
+        path: String? = nil,
         resource: String? = nil,
         query: [String: String] = [:],
-        fragment: String? = nil,
-        trailingSlashEnabled: Bool = true
+        fragment: String? = nil
     ) {
         self.scheme = scheme
+        self.user = user
+        self.pass = pass
         self.host = host
         self.port = port
         self.path = path
-        self.resource = resource
         self.query = query
         self.fragment = fragment
-        self.isTrailingSlashEnabled = trailingSlashEnabled
+    }
+
+    public var absolute: String {
+        var result = scheme + "://"
+        if let user, !user.isEmpty {
+            result += user
+            if let pass, !pass.isEmpty {
+                result += ":" + pass
+            }
+            result += "@"
+        }
+
+        result += host.trimmingSlashes()
+        if port != 80 {
+            result += ":" + String(port)
+        }
+
+        if let path, !path.isEmpty {
+            if !path.hasPrefix("/") {
+                result += "/"
+            }
+            result += path
+        }
+
+        if !query.isEmpty {
+            result += "?" + query
+                .map { $0.key + "=" + ($0.value ?? "") }
+                .joined(separator: "&")
+        }
+
+        if let fragment, !fragment.isEmpty {
+            result += "#" + fragment
+        }
+        return result
     }
 
     public var description: String {
-        "url.description"
+        absolute
     }
 }
 
 public extension HttpUrl {
-
-    ///
-    /// Add new scheme to a given url
-    ///
-    /// - Parameter values: The scheme
-    ///
-    /// - Returns: A new HttpUrl object
-    ///
-    func scheme(_ value: String) -> HttpUrl {
-        var newUrl = self
-        newUrl.scheme = value
-        return newUrl
+    
+    mutating func appendingPath(_ value: String) {
+        path = (path ?? "") + value
+    }
+    
+    func appendPath(_ value: String) -> HttpUrl {
+        var url = self
+        url.path = (url.path ?? "") + value
+        return url
     }
 
     ///
@@ -83,12 +135,8 @@ public extension HttpUrl {
     ///
     /// - Parameter values: The path components
     ///
-    /// - Returns: A new HttpUrl object
-    ///
-    func path(_ values: String...) -> HttpUrl {
-        var newUrl = self
-        newUrl.path = path + values
-        return newUrl
+    mutating func appendingPathComponents(_ values: [String]) {
+        path = (path ?? "") + values.joined(separator: "/")
     }
 
     ///
@@ -96,12 +144,20 @@ public extension HttpUrl {
     ///
     /// - Parameter values: The path components
     ///
-    /// - Returns: A new HttpUrl object
-    ///
-    func path(_ values: [String]) -> HttpUrl {
-        var newUrl = self
-        newUrl.path = path + values
-        return newUrl
+    mutating func appendingPathComponents(_ values: String...) {
+        appendingPathComponents(values)
+    }
+    
+    func appendPathComponents(_ values: String...) -> HttpUrl {
+        var url = self
+        url.appendingPathComponents(values)
+        return url
+    }
+    
+    func appendPathComponents(_ values: [String]) -> HttpUrl {
+        var url = self
+        url.appendingPathComponents(values)
+        return url
     }
 
     ///
@@ -109,13 +165,15 @@ public extension HttpUrl {
     ///
     /// - Parameter query: The query values
     ///
-    /// - Returns: A new HttpUrl object
-    ///
-    func query(_ query: [String: String?]) -> HttpUrl {
-        let finalQuery = query.compactMapValues { $0 }
-        var newUrl = self
-        newUrl.query = newUrl.query.merging(finalQuery) { $1 }
-        return newUrl
+    mutating func appendingQueryParameters(_ parameters: [String: String?]) {
+        let finalQuery = parameters.compactMapValues { $0 }
+        query = query.merging(finalQuery) { $1 }
+    }
+    
+    func appendQueryParameters(_ parameters: [String: String?]) -> HttpUrl {
+        var url = self
+        url.appendingQueryParameters(parameters)
+        return url
     }
 
     ///
@@ -124,35 +182,13 @@ public extension HttpUrl {
     /// - Parameter key: The key of the query param
     /// - Parameter value: The value of the query param
     ///
-    /// - Returns: A new HttpUrl object
-    ///
-    func query(_ key: String, _ value: String?) -> HttpUrl {
-        query([key: value])
+    mutating func appendingQueryParameter(_ key: String, _ value: String?) {
+        appendingQueryParameters([key: value])
     }
-
-    ///
-    /// Add a new resource part to the url
-    ///
-    /// - Parameter resource: The resource path component
-    ///
-    /// - Returns: A new HttpUrl object
-    ///
-    func resource(_ resource: String) -> HttpUrl {
-        var newUrl = self
-        newUrl.resource = resource
-        return newUrl
-    }
-
-    ///
-    /// Add a fragment to the url
-    ///
-    /// - Parameter fragment: The fragment value
-    ///
-    /// - Returns: A new HttpUrl object
-    ///
-    func fragment(_ fragment: String) -> HttpUrl {
-        var newUrl = self
-        newUrl.fragment = fragment
-        return newUrl
+    
+    func appendQueryParameter(_ key: String, _ value: String?) -> HttpUrl {
+        var url = self
+        url.appendingQueryParameters([key: value])
+        return url
     }
 }

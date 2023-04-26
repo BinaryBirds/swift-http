@@ -6,13 +6,13 @@ struct PostApi: HttpPipelineCollection {
 
     typealias DataType = Data
     
-    let client = SwiftHttpFoundationClient(logLevel: .trace)
+    let client = SwiftHttpFoundation()
     let apiBaseUrl = HttpUrl(host: "jsonplaceholder.typicode.com")
 
     /// NOTE: this API call should return a 404 response
     func invalidApiCall() async throws -> [Post] {
         try await decodableRequest(
-            url: apiBaseUrl.path("invalid-posts"),
+            url: apiBaseUrl.appendPathComponents("invalid-posts"),
             method: .get,
             decoder: .json(),
             executor: client.dataTask
@@ -21,7 +21,7 @@ struct PostApi: HttpPipelineCollection {
 
     func listPosts() async throws -> [Post] {
         try await decodableRequest(
-            url: apiBaseUrl.path("posts"),
+            url: apiBaseUrl.appendPathComponents("posts"),
             method: .get,
             decoder: .json(),
             executor: client.dataTask
@@ -32,8 +32,8 @@ struct PostApi: HttpPipelineCollection {
         try await decodableRequest(
             url:
                 apiBaseUrl
-                .path("posts")
-                .query([
+                .appendPathComponents("posts")
+                .appendQueryParameters([
                     "userId": String(userId)
                 ]),
             method: .get,
@@ -44,7 +44,7 @@ struct PostApi: HttpPipelineCollection {
 
     func getPost(_ id: Int) async throws -> Post {
         try await decodableRequest(
-            url: apiBaseUrl.path("posts", String(id)),
+            url: apiBaseUrl.appendPathComponents("posts", String(id)),
             method: .get,
             decoder: .json(),
             executor: client.dataTask
@@ -53,7 +53,7 @@ struct PostApi: HttpPipelineCollection {
 
     func createPost(_ post: Post) async throws -> Post {
         try await codableRequest(
-            url: apiBaseUrl.path("posts"),
+            url: apiBaseUrl.appendPathComponents("posts"),
             method: .post,
             body: post,
             encoder: .json(),
@@ -64,7 +64,7 @@ struct PostApi: HttpPipelineCollection {
 
     func updatePost(_ id: Int, _ post: Post.Update) async throws -> Post {
         try await codableRequest(
-            url: apiBaseUrl.path("posts", String(id)),
+            url: apiBaseUrl.appendPathComponents("posts", String(id)),
             method: .put,
             body: post,
             encoder: .json(),
@@ -75,7 +75,7 @@ struct PostApi: HttpPipelineCollection {
 
     func patchPost(_ id: Int, _ post: Post.Update) async throws -> Post {
         try await codableRequest(
-            url: apiBaseUrl.path("posts", String(id)),
+            url: apiBaseUrl.appendPathComponents("posts", String(id)),
             method: .put,
             body: post,
             encoder: .json(),
@@ -86,7 +86,7 @@ struct PostApi: HttpPipelineCollection {
 
     func deletePost(_ id: Int) async throws -> HttpRawResponse<DataType> {
         try await rawRequest(
-            url: apiBaseUrl.path("posts", String(id)),
+            url: apiBaseUrl.appendPathComponents("posts", String(id)),
             method: .delete,
             executor: client.dataTask
         )

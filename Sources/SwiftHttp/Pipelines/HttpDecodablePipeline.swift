@@ -3,7 +3,7 @@ public struct HttpDecodablePipeline<
     DataType,
     U: Decodable,
     D: HttpDataDecoder
->: HttpPipeline where DataType == D.DataType {
+>: HttpPipelineInterface where DataType == D.DataType {
 
     let url: HttpUrl
     let method: HttpMethod
@@ -48,11 +48,11 @@ public struct HttpDecodablePipeline<
     /// - Returns: The decoded response object
     ///
     public func execute(
-        _ executor: HttpExecutor<DataType>
+        _ executor: HttpExecutorBlock<DataType>
     ) async throws -> U {
         let req = HttpRawRequest<DataType>(
-            url: url,
             method: method,
+            url: url,
             headers: headers,
             body: body
         )

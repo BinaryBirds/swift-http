@@ -19,7 +19,7 @@ public struct HttpResponseValidation {
     ///
     /// - Throws: `Error` if something was wrong with the validation
     ///
-    public func validate(_ response: any HttpResponse) throws {
+    public func validate(_ response: any HttpResponseInterface) throws {
         for validator in validators {
             try validator.validate(response)
         }

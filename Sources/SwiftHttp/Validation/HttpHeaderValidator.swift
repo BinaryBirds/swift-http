@@ -34,7 +34,7 @@ public struct HttpHeaderValidator: HttpResponseValidator {
     ///
     /// - Throws A HttpError object if the validation fails
     ///
-    public func validate(_ response: any HttpResponse) throws {
+    public func validate(_ response: any HttpResponseInterface) throws {
         guard let value = response.headers[key] else {
             throw HttpError.missingHeader(response)
         }

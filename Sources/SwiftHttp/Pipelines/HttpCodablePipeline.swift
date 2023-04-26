@@ -6,7 +6,7 @@ public struct HttpCodablePipeline<
     E: HttpDataEncoder,
     D: HttpDataDecoder
 >:
-    HttpPipeline
+    HttpPipelineInterface
 where
     DataType == E.DataType,
     DataType == D.DataType
@@ -59,11 +59,11 @@ where
     /// - Returns: The decoded response object
     ///
     public func execute(
-        _ executor: HttpExecutor<DataType>
+        _ executor: HttpExecutorBlock<DataType>
     ) async throws -> U {
         let req = HttpRawRequest<DataType>(
-            url: url,
             method: method,
+            url: url,
             headers: headers.merging(encoder.headers) { $1 },
             body: try encoder.encode(body)
         )

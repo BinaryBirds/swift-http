@@ -1,7 +1,7 @@
 import Foundation
 import SwiftHttp
 
-extension HttpResponse where D == Data {
+extension HttpResponseInterface where D == Data {
 
     /// Converts the response data to a UTF-8 String value
     public var utf8String: String? {

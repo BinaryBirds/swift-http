@@ -8,7 +8,7 @@ public protocol HttpPipelineCollection {
         headers: [HttpHeaderKey: String],
         body: DataType?,
         validators: [HttpResponseValidator],
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> HttpRawResponse<DataType>
     
     func encodableRequest<T: Encodable, DataEncoder: HttpDataEncoder>(
@@ -18,7 +18,7 @@ public protocol HttpPipelineCollection {
         body: T,
         validators: [HttpResponseValidator],
         encoder: HttpRequestEncoder<T, DataEncoder>,
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> HttpRawResponse<DataType> where DataType == DataEncoder.DataType
     
     func decodableRequest<U: Decodable, DataDecoder: HttpDataDecoder>(
@@ -28,7 +28,7 @@ public protocol HttpPipelineCollection {
         body: DataType?,
         validators: [HttpResponseValidator],
         decoder: HttpResponseDecoder<U, DataDecoder>,
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> U where DataType == DataDecoder.DataType
     
     func codableRequest<T: Encodable, U: Decodable, DataEncoder: HttpDataEncoder, DataDecoder: HttpDataDecoder>(
@@ -39,7 +39,7 @@ public protocol HttpPipelineCollection {
         validators: [HttpResponseValidator],
         encoder: HttpRequestEncoder<T, DataEncoder>,
         decoder: HttpResponseDecoder<U, DataDecoder>,
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> U where DataType == DataEncoder.DataType, DataType == DataDecoder.DataType
 }
 
@@ -65,7 +65,7 @@ extension HttpPipelineCollection {
         headers: [HttpHeaderKey: String] = [:],
         body: DataType? = nil,
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> HttpRawResponse<DataType> {
         let pipeline: HttpRawPipeline<DataType> = .init(
             url: url,
@@ -98,7 +98,7 @@ extension HttpPipelineCollection {
         body: T,
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
         encoder: HttpRequestEncoder<T, DataEncoder>,
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> HttpRawResponse<DataType> where DataType == DataEncoder.DataType {
         let pipeline: HttpEncodablePipeline<DataType, T, DataEncoder> = .init(
             url: url,
@@ -132,7 +132,7 @@ extension HttpPipelineCollection {
         body: DataType? = nil,
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
         decoder: HttpResponseDecoder<U, DataDecoder>,
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> U where DataType == DataDecoder.DataType {
         let pipeline: HttpDecodablePipeline<DataType, U, DataDecoder> = .init(
             url: url,
@@ -167,7 +167,7 @@ extension HttpPipelineCollection {
         validators: [HttpResponseValidator] = [HttpStatusCodeValidator()],
         encoder: HttpRequestEncoder<T, DataEncoder>,
         decoder: HttpResponseDecoder<U, DataDecoder>,
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> U where DataType == DataEncoder.DataType, DataType == DataDecoder.DataType {
         let pipeline: HttpCodablePipeline<DataType, T, U, DataEncoder, DataDecoder> = .init(
             url: url,

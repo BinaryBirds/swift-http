@@ -1,5 +1,5 @@
 /// A HttpRequest representation
-public protocol HttpRequest {
+public protocol HttpRequestInterface {
     
     /// generic response type
     associatedtype D

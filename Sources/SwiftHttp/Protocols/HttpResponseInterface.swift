@@ -1,5 +1,5 @@
 /// A generic HttpResponse object
-public protocol HttpResponse {
+public protocol HttpResponseInterface {
     
     /// generic response type
     associatedtype D

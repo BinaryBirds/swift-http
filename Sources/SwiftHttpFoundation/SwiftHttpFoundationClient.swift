@@ -14,13 +14,11 @@ import SwiftHttp
 #endif
 
 /// Default URLSession based implementation of the HttpClient protocol
-public struct SwiftHttpFoundationClient: HttpClient {
+public struct SwiftHttpFoundation: HttpExecutorInterface {
     public typealias DataType = Data
-    
-    private let loggerLabel = "com.binarybirds.swift-http-foundation"
 
     let session: URLSession
-    let logger: Logger
+    let logger: Logger?
 
     ///
     /// Initializes an instance of `HTTPClient` with the given session and logging level.
@@ -32,28 +30,8 @@ public struct SwiftHttpFoundationClient: HttpClient {
     ///
     public init(
         session: URLSession = .shared,
-        logLevel: Logger.Level = .critical
+        logger: Logger? = nil
     ) {
-        var logger = Logger(label: loggerLabel)
-        logger.logLevel = logLevel
-
-        self.session = session
-        self.logger = logger
-    }
-
-    ///
-    /// Initialize a new client object
-    ///
-    /// - Parameter session: The URLSession instance, default: `.shared`
-    /// - Parameter log: Is logging enabled for the client
-    ///
-    /// - Returns: An instance of `HTTPClient`.
-    ///
-    @available(*, deprecated, message: "Use init(session:logLevel:) instead.")
-    public init(session: URLSession = .shared, log: Bool = false) {
-        var logger = Logger(label: loggerLabel)
-        logger.logLevel = log ? .info : .critical
-
         self.session = session
         self.logger = logger
     }
@@ -70,8 +48,10 @@ public struct SwiftHttpFoundationClient: HttpClient {
     public func dataTask(
         _ req: HttpRawRequest<DataType>
     ) async throws -> HttpRawResponse<DataType> {
-        let urlRequest = req.urlRequest
-        logger.info(.init(stringLiteral: urlRequest.curlString))
+        guard let urlRequest = req.foundationRequest else {
+            throw HttpError.invalidResponse
+        }
+        logger?.info(.init(stringLiteral: urlRequest.curlString))
         let res: (Data, URLResponse)
 
         #if os(Linux)
@@ -87,12 +67,12 @@ public struct SwiftHttpFoundationClient: HttpClient {
 
         do {
             let rawResponse = try HttpRawResponse(res)
-            logger.trace(.init(stringLiteral: rawResponse.traceLogValue))
-            logger.debug(.init(stringLiteral: res.0.logValue))
+            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
+            logger?.debug(.init(stringLiteral: res.0.logValue))
             return rawResponse
         }
         catch {
-            logger.debug(.init(stringLiteral: res.0.logValue))
+            logger?.debug(.init(stringLiteral: res.0.logValue))
             throw error
         }
     }
@@ -109,11 +89,13 @@ public struct SwiftHttpFoundationClient: HttpClient {
     public func uploadTask(
         _ req: HttpRawRequest<DataType>
     ) async throws -> HttpRawResponse<DataType> {
-        let urlRequest = req.urlRequest
+        guard let urlRequest = req.foundationRequest else {
+            throw HttpError.invalidRequest
+        }
         guard let data = urlRequest.httpBody else {
             throw HttpError.missingUploadData
         }
-        logger.info(.init(stringLiteral: urlRequest.curlString))
+        logger?.info(.init(stringLiteral: urlRequest.curlString))
         let res: (Data, URLResponse)
 
         #if os(Linux)
@@ -141,12 +123,12 @@ public struct SwiftHttpFoundationClient: HttpClient {
 
         do {
             let rawResponse = try HttpRawResponse(res)
-            logger.trace(.init(stringLiteral: rawResponse.traceLogValue))
-            logger.debug(.init(stringLiteral: res.0.logValue))
+            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
+            logger?.debug(.init(stringLiteral: res.0.logValue))
             return rawResponse
         }
         catch {
-            logger.debug(.init(stringLiteral: res.0.logValue))
+            logger?.debug(.init(stringLiteral: res.0.logValue))
             throw error
         }
     }
@@ -163,8 +145,10 @@ public struct SwiftHttpFoundationClient: HttpClient {
     public func downloadTask(
         _ req: HttpRawRequest<DataType>
     ) async throws -> HttpRawResponse<DataType> {
-        let urlRequest = req.urlRequest
-        logger.info(.init(stringLiteral: urlRequest.curlString))
+        guard let urlRequest = req.foundationRequest else {
+            throw HttpError.invalidRequest
+        }
+        logger?.info(.init(stringLiteral: urlRequest.curlString))
         let res: (URL, URLResponse)
         #if os(Linux)
             res = try await asyncMethod(with: urlRequest, session.downloadTask)
@@ -186,12 +170,12 @@ public struct SwiftHttpFoundationClient: HttpClient {
 
         do {
             let rawResponse = try HttpRawResponse((pathData, res.1))
-            logger.trace(.init(stringLiteral: rawResponse.traceLogValue))
-            logger.debug(.init(stringLiteral: res.0.absoluteString))
+            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
+            logger?.debug(.init(stringLiteral: res.0.absoluteString))
             return rawResponse
         }
         catch {
-            logger.debug(.init(stringLiteral: res.0.absoluteString))
+            logger?.debug(.init(stringLiteral: res.0.absoluteString))
             throw error
         }
     }

@@ -3,7 +3,7 @@ public struct HttpEncodablePipeline<
     DataType,
     T: Encodable,
     E: HttpDataEncoder
->: HttpPipeline where DataType == E.DataType {
+>: HttpPipelineInterface where DataType == E.DataType {
 
     let url: HttpUrl
     let method: HttpMethod
@@ -48,11 +48,11 @@ public struct HttpEncodablePipeline<
     /// - Returns: The HTTP response object
     ///
     public func execute(
-        _ executor: HttpExecutor<DataType>
+        _ executor: HttpExecutorBlock<DataType>
     ) async throws -> HttpRawResponse<DataType> {
         let req = HttpRawRequest<DataType>(
-            url: url,
             method: method,
+            url: url,
             headers: headers.merging(encoder.headers) { $1 },
             body: try encoder.encode(body)
         )

@@ -8,5 +8,5 @@ public protocol HttpResponseValidator {
     ///
     /// - Throws: `Error` if something was wrong with the response
     ///
-    func validate(_ response: any HttpResponse) throws
+    func validate(_ response: any HttpResponseInterface) throws
 }

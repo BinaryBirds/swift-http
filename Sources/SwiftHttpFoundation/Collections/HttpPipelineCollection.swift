@@ -10,7 +10,7 @@ extension HttpPipelineCollection where DataType == Data {
         body: DataType?,
         validators: [HttpResponseValidator],
         decoder: JSONDecoder = .init(),
-        executor: HttpExecutor<DataType>
+        executor: HttpExecutorBlock<DataType>
     ) async throws -> U {
     
         try await decodableRequest(

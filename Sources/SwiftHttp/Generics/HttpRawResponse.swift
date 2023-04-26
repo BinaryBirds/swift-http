@@ -1,5 +1,5 @@
 /// A HTTP response object with a raw data value
-public struct HttpRawResponse<RawValue>: HttpResponse {
+public struct HttpRawResponse<RawValue>: HttpResponseInterface {
 
     /// The status code of the response
     public let statusCode: HttpStatusCode

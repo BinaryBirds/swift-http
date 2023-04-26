@@ -4,16 +4,14 @@ import SwiftHttp
 import Logging
 
 /// Default URLSession based implementation of the HttpClient protocol
-public struct SwiftHttpAsyncClient: HttpClient {
+public struct SwiftHttpAsyncClient: HttpExecutorInterface {
     public typealias DataType = ByteBuffer
-    
-    private let loggerLabel = "com.binarybirds.swift-http-async"
     
     let logger: Logger
     let eventLoopGroupProvider: HTTPClient.EventLoopGroupProvider
     let configuration: HTTPClient.Configuration
     
-    init(
+    public init(
         logger: Logger,
         eventLoopGroupProvider: HTTPClient.EventLoopGroupProvider = .createNew,
         configuration: HTTPClient.Configuration = .init()
@@ -28,9 +26,8 @@ public struct SwiftHttpAsyncClient: HttpClient {
     ) async throws -> HttpRawResponse<ByteBuffer> {
         let httpClient = HTTPClient(eventLoopGroupProvider: eventLoopGroupProvider)
         do {
-            
-            var request = HTTPClientRequest(url: "https://apple.com/")
-            request.method = req.method.asyncHttpMethod
+            var request = HTTPClientRequest(url: req.url.absolute)
+            request.method = req.method.httpMethod
             for header in req.headers {
                 request.headers.add(
                     name: header.key.rawValue,

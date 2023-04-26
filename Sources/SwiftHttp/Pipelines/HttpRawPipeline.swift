@@ -1,5 +1,5 @@
 /// A raw pipeline can be used to send an recieve raw body data values
-public struct HttpRawPipeline<DataType>: HttpPipeline {
+public struct HttpRawPipeline<DataType>: HttpPipelineInterface {
 
     let url: HttpUrl
     let method: HttpMethod
@@ -41,11 +41,11 @@ public struct HttpRawPipeline<DataType>: HttpPipeline {
     /// - Returns: The HTTP response object
     ///
     public func execute(
-        _ executor: HttpExecutor<DataType>
+        _ executor: HttpExecutorBlock<DataType>
     ) async throws -> HttpRawResponse<DataType> {
         let req = HttpRawRequest<DataType>(
-            url: url,
             method: method,
+            url: url,
             headers: headers,
             body: body
         )

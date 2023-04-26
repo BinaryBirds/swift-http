@@ -1,3 +1,8 @@
+/// HttpExecutorBlock
+public typealias HttpExecutorBlock<DataType> = (
+    (HttpRawRequest<DataType>) async throws -> HttpRawResponse<DataType>
+)
+
 /// Abstract HttpClient protocol
 ///
 /// A HTTP client should be able to perfrom 3 main tasks using a HttpRequest and return a HttpResponse
@@ -6,7 +11,7 @@
 /// - download task
 /// - upload task
 ///
-public protocol HttpClient {
+public protocol HttpExecutorInterface {
     
     associatedtype DataType
 
