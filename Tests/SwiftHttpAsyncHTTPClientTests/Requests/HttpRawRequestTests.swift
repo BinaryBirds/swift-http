@@ -9,7 +9,7 @@ final class HttpRawRequestTests: XCTestCase {
     func testRawRequest() async throws {
         let logger = Logger(label: "async-http-client")
         let eventLoopGroup = MultiThreadedEventLoopGroup(numberOfThreads: 1)
-        let client = SwiftHttpAsyncClient(
+        let client = SwiftHttpAsyncHTTPClient(
             logger: logger,
             eventLoopGroupProvider: .shared(eventLoopGroup),
             configuration: .init()

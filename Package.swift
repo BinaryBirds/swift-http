@@ -27,13 +27,13 @@ let package = Package(
     targets: [
         .target(name: "SwiftHttp", dependencies: [
             .product(name: "Logging", package: "swift-log"),
-            .product(name: "AsyncHTTPClient", package: "async-http-client"),
         ]),
         .target(name: "SwiftHttpFoundation", dependencies: [
             .target(name: "SwiftHttp")
         ]),
         .target(name: "SwiftHttpAsyncHTTPClient", dependencies: [
-            .target(name: "SwiftHttp")
+            .product(name: "AsyncHTTPClient", package: "async-http-client"),
+            .target(name: "SwiftHttp"),
         ]),
 
         .testTarget(

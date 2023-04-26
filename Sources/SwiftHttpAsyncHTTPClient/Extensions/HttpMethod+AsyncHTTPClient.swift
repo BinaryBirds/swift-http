@@ -1,5 +1,5 @@
-import SwiftHttp
 import NIOHTTP1
+import SwiftHttp
 
 extension HttpMethod {
 

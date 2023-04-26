@@ -44,6 +44,7 @@ public struct HttpHeaderKey {
     public static let cancelKey: HttpHeaderKey = "Cancel-Key"
     public static let cancelLock: HttpHeaderKey = "Cancel-Lock"
     public static let cc: HttpHeaderKey = "Cc"
+    public static let cookie: HttpHeaderKey = "Cookie"
     public static let comments: HttpHeaderKey = "Comments"
     public static let contentAlternative: HttpHeaderKey = "Content-Alternative"
     public static let contentBase: HttpHeaderKey = "Content-Base"

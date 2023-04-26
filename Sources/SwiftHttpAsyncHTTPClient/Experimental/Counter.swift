@@ -20,7 +20,7 @@ struct Counter: AsyncSequence, Sendable {
 
             let result = current
             current += 1
-            return .init(string: String(current))
+            return .init(string: String(result))
         }
     }
 

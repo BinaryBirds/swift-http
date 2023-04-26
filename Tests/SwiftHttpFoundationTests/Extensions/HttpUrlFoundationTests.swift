@@ -1,6 +1,5 @@
 import XCTest
 import Logging
-import NIO
 import SwiftHttp
 @testable import SwiftHttpFoundation
 

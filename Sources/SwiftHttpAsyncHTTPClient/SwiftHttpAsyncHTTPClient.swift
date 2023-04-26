@@ -4,7 +4,7 @@ import SwiftHttp
 import Logging
 
 /// Default URLSession based implementation of the HttpClient protocol
-public struct SwiftHttpAsyncClient: HttpExecutorInterface {
+public struct SwiftHttpAsyncHTTPClient: HttpExecutorInterface {
     public typealias DataType = ByteBuffer
     
     let logger: Logger
@@ -20,7 +20,7 @@ public struct SwiftHttpAsyncClient: HttpExecutorInterface {
         self.eventLoopGroupProvider = eventLoopGroupProvider
         self.configuration = configuration
     }
-    
+
     public func dataTask(
         _ req: HttpRawRequest<ByteBuffer>
     ) async throws -> HttpRawResponse<ByteBuffer> {
@@ -37,23 +37,15 @@ public struct SwiftHttpAsyncClient: HttpExecutorInterface {
             if let body = req.body {
                 request.body = .bytes(body)
             }
-            
-            let res = try await httpClient.execute(request, timeout: .seconds(30))
 
-            let expectedBytes = res.headers.first(
-                name: "content-length"
-            ).flatMap(Int.init)
+            let res = try await httpClient.execute(
+                request,
+                timeout: .seconds(30)
+            )
 
-            var receivedBytes = 0
             var buffer = ByteBuffer()
             for try await chunk in res.body {
                 var chunk = chunk
-                receivedBytes += chunk.readableBytes
-
-                if let expectedBytes = expectedBytes {
-                    let progress = Double(receivedBytes) / Double(expectedBytes)
-                    print("progress: \(Int(progress * 100))%")
-                }
                 buffer.writeBuffer(&chunk)
             }
             

@@ -51,7 +51,7 @@ public struct SwiftHttpFoundation: HttpExecutorInterface {
         guard let urlRequest = req.foundationRequest else {
             throw HttpError.invalidResponse
         }
-        logger?.info(.init(stringLiteral: urlRequest.curlString))
+        logger?.info(.init(stringLiteral: req.cURL))
         let res: (Data, URLResponse)
 
         #if os(Linux)
@@ -67,12 +67,12 @@ public struct SwiftHttpFoundation: HttpExecutorInterface {
 
         do {
             let rawResponse = try HttpRawResponse(res)
-            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
-            logger?.debug(.init(stringLiteral: res.0.logValue))
+//            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
+//            logger?.debug(.init(stringLiteral: res.logValue))
             return rawResponse
         }
         catch {
-            logger?.debug(.init(stringLiteral: res.0.logValue))
+//            logger?.debug(.init(stringLiteral: res.logValue))
             throw error
         }
     }
@@ -95,7 +95,7 @@ public struct SwiftHttpFoundation: HttpExecutorInterface {
         guard let data = urlRequest.httpBody else {
             throw HttpError.missingUploadData
         }
-        logger?.info(.init(stringLiteral: urlRequest.curlString))
+        logger?.info(.init(stringLiteral: req.cURL))
         let res: (Data, URLResponse)
 
         #if os(Linux)
@@ -123,12 +123,12 @@ public struct SwiftHttpFoundation: HttpExecutorInterface {
 
         do {
             let rawResponse = try HttpRawResponse(res)
-            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
-            logger?.debug(.init(stringLiteral: res.0.logValue))
+//            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
+//            logger?.debug(.init(stringLiteral: res.0.logValue))
             return rawResponse
         }
         catch {
-            logger?.debug(.init(stringLiteral: res.0.logValue))
+//            logger?.debug(.init(stringLiteral: res.0.logValue))
             throw error
         }
     }
@@ -148,7 +148,7 @@ public struct SwiftHttpFoundation: HttpExecutorInterface {
         guard let urlRequest = req.foundationRequest else {
             throw HttpError.invalidRequest
         }
-        logger?.info(.init(stringLiteral: urlRequest.curlString))
+        logger?.info(.init(stringLiteral: req.cURL))
         let res: (URL, URLResponse)
         #if os(Linux)
             res = try await asyncMethod(with: urlRequest, session.downloadTask)
@@ -170,12 +170,12 @@ public struct SwiftHttpFoundation: HttpExecutorInterface {
 
         do {
             let rawResponse = try HttpRawResponse((pathData, res.1))
-            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
-            logger?.debug(.init(stringLiteral: res.0.absoluteString))
+//            logger?.trace(.init(stringLiteral: rawResponse.traceLogValue))
+//            logger?.debug(.init(stringLiteral: res.0.absoluteString))
             return rawResponse
         }
         catch {
-            logger?.debug(.init(stringLiteral: res.0.absoluteString))
+//            logger?.debug(.init(stringLiteral: res.0.absoluteString))
             throw error
         }
     }

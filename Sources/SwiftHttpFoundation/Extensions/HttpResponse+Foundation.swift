@@ -1,7 +1,7 @@
 import Foundation
 import SwiftHttp
 
-extension HttpRawResponse where RawValue == Data {
+extension HttpResponse {
     
     ///
     /// Initialize the response
@@ -10,7 +10,6 @@ extension HttpRawResponse where RawValue == Data {
     ///
     /// - Throws: `HttpError` if something was wrong with the tuple values
     ///
-
     public init(_ tuple: (Data, URLResponse)) throws {
         guard let response = tuple.1 as? HTTPURLResponse else {
             throw HttpError.invalidResponse
@@ -22,7 +21,8 @@ extension HttpRawResponse where RawValue == Data {
             let headerKey: HttpHeaderKey = .custom(key)
             headers[headerKey] = value
         }
-        guard let statusCode = HttpStatusCode(rawValue: response.statusCode)
+        guard
+            let statusCode = HttpStatusCode(rawValue: response.statusCode)
         else {
             throw HttpError.unknownStatusCode
         }

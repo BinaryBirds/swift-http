@@ -4,16 +4,15 @@ import AsyncHTTPClient
 
 struct Test {
     
-    
-    func session() async throws {
-        let (bytes, response) = try await URLSession.shared.bytes(for: .init(url: .init(fileURLWithPath: "")))
-        
-        for try await line in bytes.lines {
-            
-        }
-    }
-    
-    
+//    func session() async throws {
+//        let (bytes, response) = try await URLSession.shared.bytes(
+//            for: .init(url: .init(fileURLWithPath: ""))
+//        )
+//
+//        for try await line in bytes.lines {
+//
+//        }
+//    }
     
     func downloadStream() async throws {
         let httpClient = HTTPClient(eventLoopGroupProvider: .createNew)
