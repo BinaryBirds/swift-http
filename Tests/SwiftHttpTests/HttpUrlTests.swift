@@ -78,4 +78,10 @@ final class HttpUrlTests: XCTestCase {
             "https://jsonplaceholder.typicode.com/todos?foo=bar"
         )
     }
+    
+    func testURLInitPathIssue() throws {
+        let url = URL(string: "https://jsonplaceholder.typicode.com")!
+        let baseUrl = try XCTUnwrap(HttpUrl(url: url))
+        XCTAssertEqual(baseUrl.path, [])
+    }
 }

@@ -237,20 +237,19 @@ extension HttpUrl {
     ///
     /// Returns `nil` if a `HttpUrl` cannot be formed with the `URL` (for example, if the string contains characters that are illegal in a URL, or is an empty string).
     public init?(url: URL) {
-        guard
-            let components = URLComponents(
-                url: url,
-                resolvingAgainstBaseURL: true
-            )
-        else { return nil }
-        var path = components.path.trimmingCharacters(
-            in: CharacterSet(charactersIn: "/")
-        ).components(separatedBy: "/")
+        guard let components = URLComponents(
+            url: url,
+            resolvingAgainstBaseURL: true
+        ) else { return nil }
+        
+        var path = components.path
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+            .components(separatedBy: "/")
+            .filter { !$0.isEmpty }
         let resource: String?
         if path.last?.contains(".") == true {
             resource = path.removeLast()
-        }
-        else {
+        } else {
             resource = nil
         }
         self.init(
