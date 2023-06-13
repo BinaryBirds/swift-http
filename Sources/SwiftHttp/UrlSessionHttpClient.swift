@@ -47,6 +47,7 @@ public struct UrlSessionHttpClient: HttpClient {
     ///
     /// - Returns: An instance of `HTTPClient`.
     ///
+    @_disfavoredOverload
     @available(*, deprecated, message: "Use init(session:logLevel:) instead.")
     public init(session: URLSession = .shared, log: Bool = false) {
         var logger = Logger(label: loggerLabel)
